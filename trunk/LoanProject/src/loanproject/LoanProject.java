@@ -20,7 +20,7 @@ public class LoanProject {
     }
 =======
            // TODO code application logic here
-       // recomment 
+       // recomment test by Minh
  }
 >>>>>>> .r3
 }
