@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Util;
+package Process;
 
 import java.sql.Date;
 
@@ -10,16 +10,15 @@ import java.sql.Date;
  *
  * @author Administrator
  */
-public class FineDetails {
+public class Bill {
     private int ID;
-    private int TypeCode;
     private String AccountNo;
-    private int Money ;
-    private String Description;
     private Date Datetime;
-    
-    public FineDetails(){}
+    private int TypeCode;
+    private String Description;
 
+    public Bill(){}
+    
     public String getAccountNo() {
         return AccountNo;
     }
@@ -50,14 +49,6 @@ public class FineDetails {
 
     public void setID(int ID) {
         this.ID = ID;
-    }
-
-    public int getMoney() {
-        return Money;
-    }
-
-    public void setMoney(int Money) {
-        this.Money = Money;
     }
 
     public int getTypeCode() {
