@@ -49,19 +49,29 @@ public class Admin {
     }
    
     //user for login
-    public boolean isExited()
+    public boolean isExisted()
      {
         try {
             LoanConnection.registerDriver();
-            Connection cn= LoanConnection.createConnection();
-            
-            String sql = "SELECT * FROM Admin WHERE Username= ? AND Password =?";
-            PreparedStatement stm = cn.prepareStatement(sql);
-            stm.setString(1,this.getUsername());
-            stm.setString(2, this.getPassword());
-            ResultSet rs = stm.executeQuery(); 
-            cn.close();
-            return rs.next();
+            Connection cn= LoanConnection.createConnection();     
+            if(cn!=null)
+            {
+               String sql = "SELECT * FROM Admin WHERE Username= ? AND Password =?";
+               PreparedStatement stm = cn.prepareStatement(sql);
+               stm.setString(1,this.getUsername());
+               stm.setString(2, this.getPassword());
+               ResultSet rs = stm.executeQuery(); 
+               if(rs.next())
+               {
+                  this.setFullname(rs.getString("Fullname"));
+                  return true;
+               }
+               return false;
+           }
+           else{
+               JOptionPane.showMessageDialog(null, "Can'not connect database");
+               return false;
+           }
         } catch (SQLException ex) {
             Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
             return false;
