@@ -4,6 +4,7 @@
  */
 package MainProgram;
 
+import UI.AccountDetails;
 import UI.Home;
 import UI.Login;
 
@@ -32,11 +33,9 @@ public class Main {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-               Home home= new Home();
-               home.setVisible(true);
-               home.setEnabled(false);
-               new Login().setVisible(true);
-                
+               Home homeForm= new Home(); 
+               AccountDetails accForm= new AccountDetails();
+               new Login(homeForm,accForm).setVisible(true);
             }
         });
     }
