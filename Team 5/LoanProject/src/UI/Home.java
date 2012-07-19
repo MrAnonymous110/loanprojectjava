@@ -91,6 +91,9 @@ public class Home extends javax.swing.JFrame {
 
         pnAccount.setBackground(new java.awt.Color(255, 255, 51));
         pnAccount.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnAccountMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 pnAccountMouseEntered(evt);
             }
@@ -371,6 +374,12 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
          lbHello.setText("Welcome, "+admin.getFullname().toUpperCase()+"!");
     }//GEN-LAST:event_formWindowActivated
+
+    private void pnAccountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnAccountMouseClicked
+        // TODO add your handling code here:
+        AccountManager form= new AccountManager();
+        form.setVisible(true);
+    }//GEN-LAST:event_pnAccountMouseClicked
 
   
     // Variables declaration - do not modify//GEN-BEGIN:variables
