@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTable;
 
 /**
  *
@@ -72,7 +73,7 @@ public class Branches {
             try {
                 LoanConnection.registerDriver();
                 Connection cn = LoanConnection.createConnection();
-                String sql = "insert into Branches (BranchesCode,Name,Address,Email,Phone) values (?,?,?,?,?)";
+                String sql = "Insert into [Branches] (BranchesCode,Name,Address,Email,Phone) values (?,?,?,?,?)";
                 PreparedStatement stm = cn.prepareStatement(sql);
                 stm.setString(1, this.getBranchesCode());
                 stm.setString(2, this.getName());
@@ -183,5 +184,10 @@ public class Branches {
             else
                 return null;
         }
+    }
+    
+    public static Object GetData(JTable table, int RowIndex, int ColIndex)
+    {
+        return table.getModel().getValueAt(RowIndex, ColIndex);
     }
 }

@@ -181,6 +181,9 @@ public class Home extends javax.swing.JFrame {
 
         pnBranches.setBackground(new java.awt.Color(102, 255, 102));
         pnBranches.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnBranchesMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 pnBranchesMouseEntered(evt);
             }
@@ -374,6 +377,12 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
          lbHello.setText("Welcome, "+admin.getFullname().toUpperCase()+"!");
     }//GEN-LAST:event_formWindowActivated
+
+    private void pnBranchesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnBranchesMouseClicked
+        // TODO add your handling code here:
+        BranchesManager branches = new BranchesManager();
+        branches.setVisible(true);
+    }//GEN-LAST:event_pnBranchesMouseClicked
 
     private void pnAccountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnAccountMouseClicked
         // TODO add your handling code here:
