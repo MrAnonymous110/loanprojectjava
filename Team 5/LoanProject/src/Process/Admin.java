@@ -60,7 +60,7 @@ public class Admin {
                ResultSet rs = cs.executeQuery();
                if(rs.next())
                {
-                  this.setFullname(rs.getString("Fullname"));
+                  this.setFullname(rs.getString("Name"));
                   return true;
                }
                return false;
