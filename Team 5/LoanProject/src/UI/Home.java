@@ -14,12 +14,14 @@ import javax.swing.border.Border;
  * @author Administrator
  */
 public class Home extends javax.swing.JFrame {
-    Admin admin;
+    Admin admin ;
+    AccountManager accManager;
     /**
      * Creates new form Home
      */
     public Home() {
-        initComponents();     
+        initComponents();    
+        accManager = new AccountManager();
     }
 
     @SuppressWarnings("unchecked")
@@ -67,7 +69,7 @@ public class Home extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
-        jPanel2.setBackground(new java.awt.Color(153, 204, 255));
+        jPanel2.setBackground(new java.awt.Color(204, 255, 204));
 
         pnLoans.setBackground(new java.awt.Color(255, 51, 51));
         pnLoans.setPreferredSize(new java.awt.Dimension(204, 217));
@@ -368,6 +370,9 @@ public class Home extends javax.swing.JFrame {
         pnAccount.setBackground(new java.awt.Color(255, 51, 51));
         pnAccount.setPreferredSize(new java.awt.Dimension(204, 217));
         pnAccount.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnAccountMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 pnAccountMouseEntered(evt);
             }
@@ -450,12 +455,12 @@ public class Home extends javax.swing.JFrame {
                             .addComponent(pnFines, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(pnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(pnBills, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addGap(34, 34, 34)
                     .addComponent(pnAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(226, Short.MAX_VALUE)))
+                    .addContainerGap(210, Short.MAX_VALUE)))
         );
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
@@ -563,6 +568,13 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_pnExitMouseClicked
+
+    private void pnAccountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnAccountMouseClicked
+        // TODO add your handling code here:
+        accManager.setVisible(true);
+        accManager.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        accManager.setLocationRelativeTo(null);
+    }//GEN-LAST:event_pnAccountMouseClicked
 
   
     // Variables declaration - do not modify//GEN-BEGIN:variables

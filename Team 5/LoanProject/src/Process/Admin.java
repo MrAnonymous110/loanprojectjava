@@ -53,9 +53,10 @@ public class Admin {
             Connection cn= LoanConnection.createConnection();     
             if(cn!=null)
             {
-               String sql = "{call sp_Admin_SelectRow(?)}";
+               String sql = "{call sp_Admin_SelectRow(?,?)}";
                CallableStatement cs= cn.prepareCall(sql);
-               cs.setString(1,this.getUsername());      
+               cs.setString(1,this.getUsername()); 
+               cs.setString(2,this.getPassword()); 
                ResultSet rs = cs.executeQuery();
                if(rs.next())
                {

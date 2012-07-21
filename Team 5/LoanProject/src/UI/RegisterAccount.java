@@ -323,9 +323,9 @@ public class RegisterAccount extends javax.swing.JFrame {
                 acc.setRegisterDate(getCurentDate());
                 boolean isOK=  acc.register();
                 if(isOK)
-                {
-                   lbMessage.setText("Successful!");
-                   btnResetActionPerformed(evt);
+                {  
+                    btnResetActionPerformed(evt);
+                    lbMessage.setText("Successful!");
                 }
                 else
                 {
