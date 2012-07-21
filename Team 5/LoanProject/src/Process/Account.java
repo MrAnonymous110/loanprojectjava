@@ -4,6 +4,7 @@
  */
 package Process;
 
+
 import java.sql.*;
 import java.util.Vector;
 
@@ -114,9 +115,10 @@ public class Account {
             LoanConnection.registerDriver();
             Connection cn= LoanConnection.createConnection();
             
-            String sql="select * from Account where AccountNo="+this.getAccountNo();
-            PreparedStatement stm= cn.prepareStatement(sql);
-            ResultSet rs=stm.executeQuery();
+            String sql="{call sp_Account_SelectRow(?)}";
+            CallableStatement cs= cn.prepareCall(sql);
+            cs.setString(1,this.getAccountNo());
+            ResultSet rs=cs.executeQuery();
             return rs.next();
         } catch (SQLException ex) {
             return false;
@@ -131,9 +133,8 @@ public class Account {
             LoanConnection.registerDriver();
             Connection cn= LoanConnection.createConnection();
             
-            String sql="INSERT INTO Admin (AccountNo,Password,Name,BirthDay,Organization,Address,Email,Phone,Salary,RegisterDate)";
-            sql+= " values (?,?,?,?,?,?,?,?,?,?)";
-            PreparedStatement stm = cn.prepareStatement(sql);
+            String sql="{call sp_Account_Insert(?,?,?,?,?,?,?,?,?,?)}";
+            CallableStatement stm = cn.prepareCall(sql);
             stm.setString(1,this.getAccountNo());
             stm.setString(2,this.getPassword());
             stm.setString(3,this.getName());
@@ -144,12 +145,12 @@ public class Account {
             stm.setString(8,this.getPhone());
             stm.setInt(9,this.getSalary());
             stm.setDate(10,this.getRegisterDate());
-            
-            boolean isOK= stm.execute();
-            return isOK;
+            stm.execute();      
+            return true;
          } catch (SQLException ex) {
-            return false;
-          }
+             JOptionPane.showMessageDialog(null,ex.getMessage());
+             return false;
+         }
        }else{
            JOptionPane.showMessageDialog(null,"Account is existed!");
            return false;
@@ -162,8 +163,8 @@ public class Account {
             LoanConnection.registerDriver();
             Connection cn= LoanConnection.createConnection();
             
-            String sql="select * from Account";
-            PreparedStatement stm= cn.prepareStatement(sql);
+            String sql="{call sp_Account_SelectAll()}";
+            CallableStatement stm= cn.prepareCall(sql);
             ResultSet rs= stm.executeQuery();
             Vector listAccount= new Vector();
             while(rs.next())
@@ -195,22 +196,20 @@ public class Account {
             LoanConnection.registerDriver();
             Connection cn= LoanConnection.createConnection();
             
-            String sql="Update Admin set Password=?,Name=?,BirthDay=?,Organization=?,Address=?,Email=?,Phone=?,Salary=?,RegisterDate=?";
-            sql+= " where AccountNo=?";
-            PreparedStatement stm = cn.prepareStatement(sql);
-           // stm.setString(1,this.getAccountNo());
-            stm.setString(1,this.getPassword());
-            stm.setString(2,this.getName());
-            stm.setDate(3,this.getBirthday());
-            stm.setString(4,this.getOrganization());
-            stm.setString(5,this.getAddress());
-            stm.setString(6,this.getEmail());
-            stm.setString(7,this.getPhone());
-            stm.setInt(8,this.getSalary());
-            stm.setDate(9,this.getRegisterDate());
-            stm.setString(10,this.getAccountNo());
-            boolean isOK= stm.execute();
-            return isOK;
+            String sql="{call sp_Account_Update(?,?,?,?,?,?,?,?,?,?)}";
+            CallableStatement stm = cn.prepareCall(sql);
+            stm.setString(1,this.getAccountNo());
+            stm.setString(2,this.getPassword());
+            stm.setString(3,this.getName());
+            stm.setDate(4,this.getBirthday());
+            stm.setString(5,this.getOrganization());
+            stm.setString(6,this.getAddress());
+            stm.setString(7,this.getEmail());
+            stm.setString(8,this.getPhone());
+            stm.setInt(9,this.getSalary());
+            stm.setDate(10,this.getRegisterDate());
+            stm.execute();   
+            return true;
          } catch (SQLException ex) {
             return false;
           }
@@ -227,10 +226,11 @@ public class Account {
            try {
             LoanConnection.registerDriver();
             Connection cn= LoanConnection.createConnection();
-            String sql="delete from Account where AccountNo="+this.getAccountNo();
-            PreparedStatement stm= cn.prepareStatement(sql);
-            boolean isOK= stm.execute();
-            return isOK;
+            String sql="{call sp_Account_DeleteRow(?)}";
+            CallableStatement cs= cn.prepareCall(sql);
+            cs.setString(1, this.getAccountNo());
+            cs.execute();
+            return true;
          } catch (SQLException ex) {
             return false;
          } 
