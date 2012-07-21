@@ -84,6 +84,11 @@ public class Login extends javax.swing.JFrame {
 
         btRegister.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Credit-Card-16x16.png"))); // NOI18N
         btRegister.setText("Loan Register");
+        btRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btRegisterActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("-------------------------------------------");
 
@@ -214,6 +219,11 @@ public class Login extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btLoginActionPerformed
+
+    private void btRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRegisterActionPerformed
+        // TODO add your handling code here:
+        new RegisterAccount().setVisible(true);
+    }//GEN-LAST:event_btRegisterActionPerformed
 
     private boolean isValidate()
     {
