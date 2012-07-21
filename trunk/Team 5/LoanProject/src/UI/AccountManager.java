@@ -5,7 +5,13 @@
 package UI;
 
 import Process.Account;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.table.AbstractTableModel;
@@ -18,15 +24,20 @@ import javax.swing.table.TableModel;
  * @author Administrator
  */
 public class AccountManager extends javax.swing.JFrame {
+
     Vector list;
     Vector column;
+    Account accDefault;
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
     /**
      * Creates new form AccountManager
      */
     public AccountManager() {
         initComponents();
-        list= new Vector();
-        column= new Vector();
+        list = new Vector();
+        column = new Vector();
+        accDefault = new Account();
         column.addElement("AccountNo");
         column.addElement("Password");
         column.addElement("Name");
@@ -37,18 +48,20 @@ public class AccountManager extends javax.swing.JFrame {
         column.addElement("Phone");
         column.addElement("Salary");
         column.addElement("RegisterDate");
- 
+
         reloadData();
     }
 
-    private void reloadData()
-    {
-        list= Account.getList();
-        TableModel model= new DefaultTableModel(list,column);
+    private void reloadData() {
+        list = Account.getList();
+        txtSearch.setText("");
+        TableModel model = new DefaultTableModel(list, column);
         tblAccountList.setModel(model);
         tblAccountList.removeColumn(tblAccountList.getColumn("Password"));
+        resetTextForm();
+        txtAccountNo.setEditable(false);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -61,9 +74,8 @@ public class AccountManager extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         txtSearch = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnSearch = new javax.swing.JButton();
+        btnDetails = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblAccountList = new javax.swing.JTable();
@@ -87,7 +99,7 @@ public class AccountManager extends javax.swing.JFrame {
         txtEmail = new javax.swing.JTextField();
         txtPhone = new javax.swing.JTextField();
         lblUsername8 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        txtPassword = new javax.swing.JPasswordField();
         btnSave = new javax.swing.JButton();
         lbMessage = new javax.swing.JLabel();
         btnNew = new javax.swing.JButton();
@@ -99,8 +111,6 @@ public class AccountManager extends javax.swing.JFrame {
         mnRefresh = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mnExit = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        mnDelete = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -117,19 +127,21 @@ public class AccountManager extends javax.swing.JFrame {
 
         txtSearch.setPreferredSize(new java.awt.Dimension(6, 23));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Search1.jpg"))); // NOI18N
-        jButton1.setText("Search");
-
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/address_16.png"))); // NOI18N
-        jButton2.setText("View Details");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Search1.jpg"))); // NOI18N
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnSearchActionPerformed(evt);
             }
         });
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/delete-icon.png"))); // NOI18N
-        jButton4.setText("Delete");
+        btnDetails.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/address_16.png"))); // NOI18N
+        btnDetails.setText("View Details");
+        btnDetails.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDetailsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -137,13 +149,11 @@ public class AccountManager extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(107, 107, 107)
+                .addComponent(btnDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(209, 209, 209)
                 .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
+                .addComponent(btnSearch)
                 .addContainerGap(523, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -151,10 +161,9 @@ public class AccountManager extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton4))
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch)
+                    .addComponent(btnDetails))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -190,6 +199,11 @@ public class AccountManager extends javax.swing.JFrame {
             }
         });
         tblAccountList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblAccountList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblAccountListMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblAccountList);
 
         jPanel3.add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -238,6 +252,11 @@ public class AccountManager extends javax.swing.JFrame {
 
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/save-16x16.png"))); // NOI18N
         btnSave.setText("save");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
 
         lbMessage.setForeground(new java.awt.Color(255, 0, 51));
 
@@ -277,7 +296,7 @@ public class AccountManager extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txtAccountNo)
-                                    .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)))
+                                    .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)))
                             .addComponent(lbMessage))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
@@ -304,7 +323,7 @@ public class AccountManager extends javax.swing.JFrame {
                     .addComponent(txtAccountNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblUsername8))
                 .addGap(6, 6, 6)
                 .addComponent(lblUsername1)
@@ -353,6 +372,7 @@ public class AccountManager extends javax.swing.JFrame {
 
         jMenu1.setText("File");
 
+        mnOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         mnOpen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Open.png"))); // NOI18N
         mnOpen.setText("Open");
         mnOpen.addActionListener(new java.awt.event.ActionListener() {
@@ -362,19 +382,38 @@ public class AccountManager extends javax.swing.JFrame {
         });
         jMenu1.add(mnOpen);
 
+        mnNew.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         mnNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/button-new-icon.png"))); // NOI18N
         mnNew.setText("New");
+        mnNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnNewActionPerformed(evt);
+            }
+        });
         jMenu1.add(mnNew);
 
+        mnSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         mnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/save-icon.jpg"))); // NOI18N
         mnSave.setText("Save");
+        mnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnSaveActionPerformed(evt);
+            }
+        });
         jMenu1.add(mnSave);
 
+        mnRefresh.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F5, 0));
         mnRefresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Refresh-icon.jpg"))); // NOI18N
         mnRefresh.setText("Refresh");
+        mnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnRefreshActionPerformed(evt);
+            }
+        });
         jMenu1.add(mnRefresh);
         jMenu1.add(jSeparator1);
 
+        mnExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.ALT_MASK));
         mnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/exit.jpg"))); // NOI18N
         mnExit.setText("Exit");
         mnExit.addActionListener(new java.awt.event.ActionListener() {
@@ -386,20 +425,14 @@ public class AccountManager extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
-
-        mnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/delete-icon.png"))); // NOI18N
-        mnDelete.setText("Delete");
-        jMenu2.add(mnDelete);
-
-        jMenuBar1.add(jMenu2);
-
         jMenu3.setText("Help");
 
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/help.png"))); // NOI18N
         jMenuItem1.setText("How to use");
         jMenu3.add(jMenuItem1);
 
+        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, java.awt.event.InputEvent.SHIFT_MASK));
         jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/information.png"))); // NOI18N
         jMenuItem2.setText("About");
         jMenu3.add(jMenuItem2);
@@ -413,8 +446,12 @@ public class AccountManager extends javax.swing.JFrame {
 
     private void mnOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenActionPerformed
         // TODO add your handling code here:
-        AccountDetails form= new AccountDetails();
+        AccountDetails form = new AccountDetails();
         form.setVisible(true);
+        form.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        form.setLocationRelativeTo(null);
+
+                
     }//GEN-LAST:event_mnOpenActionPerformed
 
     private void mnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnExitActionPerformed
@@ -422,67 +459,206 @@ public class AccountManager extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_mnExitActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailsActionPerformed
         // TODO add your handling code here:
-        AccountDetails form= new AccountDetails();
+        AccountDetails form = new AccountDetails();
         form.setVisible(true);
-       
-    }//GEN-LAST:event_jButton2ActionPerformed
+        form.setLocationRelativeTo(null);
+        form.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+         form.setLocationRelativeTo(null);
+    }//GEN-LAST:event_btnDetailsActionPerformed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         // TODO add your handling code here:
         txtAccountNo.setEditable(true);
+        resetTextForm();
     }//GEN-LAST:event_btnNewActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /*
-         * Set the Nimbus look and feel
-         */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /*
-         * If Nimbus (introduced in Java SE 6) is not available, stay with the
-         * default look and feel. For details see
-         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AccountManager.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AccountManager.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AccountManager.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AccountManager.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /*
-         * Create and display the form
-         */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            public void run() {
-                new AccountManager().setVisible(true);
-            }
-        });
+    // reset text for form information
+    private void resetTextForm() {
+        txtAccountNo.setText("");
+        txtPassword.setText("");
+        txtName.setText("");
+        txtBirthDay.setText("");
+        txtOrganization.setText("");
+        txtAddress.setText("");
+        txtEmail.setText("");
+        txtPhone.setText("");
+        txtSalary.setText("");
     }
+   // method process button save and menu save
+    private void save() {
+        // TODO add your handling code here:
+        if (isValidate()) {
+            if (txtAccountNo.isEditable()) {
+                // insert new Account        
+               setAccountDefault();
+               accDefault.setRegisterDate(getCurentDate());
+               boolean isOK = accDefault.register();
+               if(isOK)
+               {
+                   lbMessage.setText("Successful!");
+                   reloadData();
+               }
+               else
+               {
+                   lbMessage.setText("Insert fail!!");
+               }
+            } else {
+               setAccountDefault();
+               boolean isOK = accDefault.update();
+               if(isOK)
+               {
+                   lbMessage.setText("Successful!");
+                   reloadData();
+               }
+               else
+               {
+                   lbMessage.setText("Update fail!!");
+               }
+            }
+        }
+    }
+    
+    private void tblAccountListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAccountListMouseClicked
+        // TODO add your handling code here:
+        int index = tblAccountList.getSelectedRow();
+        if (index > -1) {
+            try {
+                Vector acc = (Vector) list.get(index);
+                txtAccountNo.setText(acc.get(0).toString());
+                txtPassword.setText(acc.get(1).toString());
+                txtName.setText(acc.get(2).toString());
+                txtBirthDay.setText(acc.get(3).toString());
+                txtOrganization.setText(acc.get(4).toString());
+                txtAddress.setText(acc.get(5).toString());
+                txtEmail.setText(acc.get(6).toString());
+                txtPhone.setText(acc.get(7).toString());
+                txtSalary.setText(acc.get(8).toString());
+               
+                accDefault.setAccountNo(acc.get(0).toString());
+                accDefault.setPassword(acc.get(1).toString());
+                accDefault.setName(acc.get(2).toString());
+                accDefault.setBirthday(new java.sql.Date(dateFormat.parse(acc.get(3).toString()).getTime()));
+                accDefault.setOrganization(acc.get(4).toString());
+                accDefault.setAddress(acc.get(5).toString());
+                accDefault.setEmail(acc.get(6).toString());
+                accDefault.setPhone(acc.get(7).toString());
+                accDefault.setSalary(Integer.parseInt(acc.get(8).toString()));
+                accDefault.setRegisterDate(new java.sql.Date(dateFormat.parse(acc.get(9).toString()).getTime()));
+            } catch (ParseException ex) {
+                Logger.getLogger(AccountManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_tblAccountListMouseClicked
+   // set value from form Information to object accDefault 
+    private void setAccountDefault() {
+        try {
+
+            accDefault.setAccountNo(txtAccountNo.getText());
+            accDefault.setPassword(new String(txtPassword.getPassword()));
+            accDefault.setAddress(txtAddress.getText());
+            accDefault.setName(txtName.getText());
+            accDefault.setBirthday(new java.sql.Date(dateFormat.parse(txtBirthDay.getText().trim()).getTime()));
+            accDefault.setEmail(txtEmail.getText());
+            accDefault.setOrganization(txtOrganization.getText());
+            accDefault.setPhone(txtPhone.getText());
+            accDefault.setSalary(Integer.parseInt(txtSalary.getText()));
+        } catch (ParseException ex) {
+            Logger.getLogger(AccountManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        save();
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        // TODO add your handling code here:
+        list= Account.search(txtSearch.getText());  
+        TableModel model = new DefaultTableModel(list, column);
+        tblAccountList.setModel(model);
+        tblAccountList.removeColumn(tblAccountList.getColumn("Password")); 
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void mnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnNewActionPerformed
+        // TODO add your handling code here:
+        txtAccountNo.setEditable(true);
+        resetTextForm();
+    }//GEN-LAST:event_mnNewActionPerformed
+
+    private void mnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnSaveActionPerformed
+        // TODO add your handling code here
+        save();
+    }//GEN-LAST:event_mnSaveActionPerformed
+
+    private void mnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnRefreshActionPerformed
+        // TODO add your handling code here:
+        reloadData();
+    }//GEN-LAST:event_mnRefreshActionPerformed
+
+    private boolean isValidate() {
+        if (txtAccountNo.getText().equals("") || txtPassword.getPassword().length == 0
+                || txtName.getText().equals("")
+                || txtAddress.getText().equals("") || txtBirthDay.getText().equals("")
+                || txtEmail.getText().equals("") || txtOrganization.getText().equals("")
+                || txtPhone.getText().equals("") || txtSalary.getText().equals("")) {
+            lbMessage.setText("Can not register because has textbox is null");
+            return false;
+        }
+        // check Format of BirthDay
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        if (txtBirthDay.getText().trim().length() != dateFormat.toPattern().length()) {
+            lbMessage.setText("BirthDay is not valid");
+            return false;
+        }
+        dateFormat.setLenient(false);
+
+        try {
+            //parse the inDate parameter
+            dateFormat.parse(txtBirthDay.getText().trim());
+        } catch (ParseException pe) {
+            lbMessage.setText("BirthDay is not valid");
+            return false;
+        }
+
+        // validate email
+        String regex = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        if (!isMatches(txtEmail.getText().trim(), regex)) {
+            lbMessage.setText("Email is not valid");
+            return false;
+        }
+        // validate salary
+        regex = "\\d+";
+        if (!isMatches(txtSalary.getText().trim(), regex)) {
+            lbMessage.setText("Salary is not positive number ");
+            return false;
+        }
+        //validate Phone Number
+        if (!isMatches(txtPhone.getText().trim(), regex) || txtPhone.getText().trim().length() < 10 || txtPhone.getText().trim().length() > 12) {
+            lbMessage.setText("Phone is not valid");
+            return false;
+        }
+        return true;
+
+    }
+
+    public boolean isMatches(String str, String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(str);
+        return matcher.matches();
+    }
+
+    public java.sql.Date getCurentDate() {
+        java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
+        return sqlDate;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDetails;
     private javax.swing.JButton btnNew;
     private javax.swing.JButton btnSave;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
@@ -491,7 +667,6 @@ public class AccountManager extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -506,7 +681,6 @@ public class AccountManager extends javax.swing.JFrame {
     private javax.swing.JLabel lblUsername6;
     private javax.swing.JLabel lblUsername7;
     private javax.swing.JLabel lblUsername8;
-    private javax.swing.JMenuItem mnDelete;
     private javax.swing.JMenuItem mnExit;
     private javax.swing.JMenuItem mnNew;
     private javax.swing.JMenuItem mnOpen;
@@ -519,6 +693,7 @@ public class AccountManager extends javax.swing.JFrame {
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextArea txtOrganization;
+    private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtPhone;
     private javax.swing.JTextField txtSalary;
     private javax.swing.JTextField txtSearch;
