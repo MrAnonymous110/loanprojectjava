@@ -19,10 +19,15 @@ public class Home extends javax.swing.JFrame {
     /**
      * Creates new form Home
      */
+    BranchesManager branchesManager;
+    FineManager fineManager;
     public Home() {
         initComponents();    
         accManager = new AccountManager();
+        branchesManager = new BranchesManager();
+        fineManager = new FineManager();
     }
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -158,6 +163,9 @@ public class Home extends javax.swing.JFrame {
         pnBranches.setBackground(new java.awt.Color(255, 51, 51));
         pnBranches.setPreferredSize(new java.awt.Dimension(204, 217));
         pnBranches.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnBranchesMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 pnBranchesMouseEntered(evt);
             }
@@ -200,6 +208,9 @@ public class Home extends javax.swing.JFrame {
         pnFines.setBackground(new java.awt.Color(255, 51, 51));
         pnFines.setPreferredSize(new java.awt.Dimension(204, 217));
         pnFines.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnFinesMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 pnFinesMouseEntered(evt);
             }
@@ -455,12 +466,12 @@ public class Home extends javax.swing.JFrame {
                             .addComponent(pnFines, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(pnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(pnBills, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addGap(34, 34, 34)
                     .addComponent(pnAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(210, Short.MAX_VALUE)))
+                    .addContainerGap(228, Short.MAX_VALUE)))
         );
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
@@ -568,6 +579,18 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_pnExitMouseClicked
+
+    private void pnBranchesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnBranchesMouseClicked
+        // TODO add your handling code here:
+        branchesManager.setVisible(true);
+        branchesManager.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_pnBranchesMouseClicked
+
+    private void pnFinesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnFinesMouseClicked
+        // TODO add your handling code here:
+        fineManager.setVisible(true);
+        fineManager.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }//GEN-LAST:event_pnFinesMouseClicked
 
     private void pnAccountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnAccountMouseClicked
         // TODO add your handling code here:
