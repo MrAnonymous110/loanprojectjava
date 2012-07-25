@@ -55,12 +55,14 @@ public class Admin {
             {
                String sql = "{call sp_Admin_SelectRow(?,?)}";
                CallableStatement cs= cn.prepareCall(sql);
+               cs.setString(1,this.getUsername());
+               cs.setString(2, this.getPassword());
                cs.setString(1,this.getUsername()); 
                cs.setString(2,this.getPassword()); 
                ResultSet rs = cs.executeQuery();
                if(rs.next())
                {
-                  this.setFullname(rs.getString("Name"));
+                  this.setFullname(rs.getString("FullName"));
                   return true;
                }
                return false;
