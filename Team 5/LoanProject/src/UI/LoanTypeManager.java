@@ -81,7 +81,7 @@ public class LoanTypeManager extends JFrame {
         setLocation((w-w/3)/2, (h-h/3)/2);
         setTitle("Loan Types");
         setVisible(true);
-        setResizable(false);
+        setResizable(true);
     }
 
     private void loadData() throws HeadlessException {
