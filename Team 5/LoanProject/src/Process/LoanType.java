@@ -140,4 +140,8 @@ public class LoanType {
             return false;
         }
     }
+    
+    public static void main(String[] args) {
+        LoanType lt = new LoanType();
+    }
 }
