@@ -250,33 +250,50 @@ public class FineDetails {
         return countMonth;
     }
 
-    private static Float[] CalMonthlyAllInstallment(int CountMonth, Float Rate, Float LoanMoney, Float CurrentMoney) {
-        Float MonthlyInstallment = LoanMoney / CountMonth;
-        Float[] Result = new Float[CountMonth];
-        for (int i = 0; i < CountMonth; i++) {
-            Result[i] = MonthlyInstallment + CalMonthlyRate(Rate, CurrentMoney);
-        }
-        return Result;
-    }
-
-    private static Float CalMonthlyRate(Float Rate, Float CurrentMoney) {
-        return CurrentMoney * Rate;
-    }
-
     public static void CalFine() {
-        Vector Duration = getListLoanDetails("Select [BeginTime], [EndTime],[LoanMoney],[CurentMoney] From [LoanDetails]");
-        String BeginDateStr = ((Vector) Duration.elementAt(0)).get(0).toString();
-        String FinishDateStr = ((Vector) Duration.elementAt(0)).get(1).toString();
-        Float LoanMoney = Float.parseFloat(((Vector) Duration.elementAt(0)).get(2).toString());
-        Float CurrentMoney = Float.parseFloat(((Vector) Duration.elementAt(0)).get(3).toString());
-        int[] datetimeBegin = GetDateFromString(BeginDateStr);
-        int[] datetimeFinish = GetDateFromString(FinishDateStr);
+//        Vector Duration = getListLoanDetails("Select [BeginTime], [EndTime],[LoanMoney],[CurentMoney] From [LoanDetails]");
         int[] datetimeCurrent = GetDateFromString(GetDateTimeNow());
-        int countMonth = CalCountMonth(datetimeBegin, datetimeFinish);
-        Double RateDouble = 0.1;
-        Float Rate = Float.parseFloat(RateDouble.toString());
-        Float[] MonthlyAllInstallment = CalMonthlyAllInstallment(countMonth, Rate, LoanMoney, CurrentMoney);
-        
+        String sql = "Select * from [InstallmentMonthly] Where [State]='" + 0 + "'";
+        Vector InstallmentMonthly = InstallmentMonthlyDetail.getListInstallmentMonthly(sql);
+        Double FineRate = null;
+        String PayDate;
+        int TypeCode = 0;
+        String Account;
+        for (int i = 0; i < InstallmentMonthly.size(); i++) {
+            PayDate = ((Vector) InstallmentMonthly.elementAt(i)).elementAt(4).toString();
+            Account = ((Vector) InstallmentMonthly.elementAt(i)).elementAt(1).toString();
+            int[] PayDateArr = new int[3];
+            JOptionPane.showMessageDialog(null, PayDate);
+            PayDateArr = GetDateFromString(PayDate);
+            if (PayDateArr[2] == datetimeCurrent[2]) {
+                if (PayDateArr[1] == datetimeCurrent[1]) {
+                    if (datetimeCurrent[0] > PayDateArr[0]) {
+                        Float total = Float.parseFloat(((Vector) InstallmentMonthly.elementAt(i)).elementAt(3).toString());
+                        if (total > 1 && total < 5000) {
+                            FineRate = 0.02;
+                            TypeCode = 2;
+                        }
+                        if (total > 5001 && total < 20000) {
+                            FineRate = 0.05;
+                            TypeCode = 3;
+                        }
+                        if (total > 20001) {
+                            FineRate = 0.08;
+                            TypeCode = 4;
+                        }
+                        FineDetails fine = new FineDetails();
+                        fine.setAccountNo(Account);
+                        fine.setDatetime(Date.valueOf(GetDateTimeNow()));
+                        fine.setDescription("Fine in: " + PayDate);
+                        fine.setMoney(FineRate * total);
+                        fine.setTypeCode(TypeCode);
+                        fine.insert();
+                        break;
+                    }
+                }
+            }
+        }
+
         //Float CurrentMonthlyRate = CalMonthlyRate(Rate, CurrentMoney);
 //        
 //        for (int i = 0; i < countMonth; i++) {
