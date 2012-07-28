@@ -4,10 +4,8 @@
  */
 package Process;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.Scanner;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,19 +16,19 @@ public class LoanType {
 
     private int TypeCode;
     private String TypeName;
-    private int InterestRate;
+    private float InterestRate;
     private String Description;
 
     public LoanType() {
     }
 
-    public LoanType(int TypeCode, String TypeName, int InterestRate, String Description) {
+    public LoanType(int TypeCode, String TypeName, float InterestRate, String Description) {
         this.TypeCode = TypeCode;
         this.TypeName = TypeName;
         this.InterestRate = InterestRate;
         this.Description = Description;
     }
-    
+
     public String getDescription() {
         return Description;
     }
@@ -39,7 +37,7 @@ public class LoanType {
         this.Description = Description;
     }
 
-    public int getInterestRate() {
+    public float getInterestRate() {
         return InterestRate;
     }
 
@@ -68,7 +66,7 @@ public class LoanType {
         try {
             Connection cn = LoanConnection.createConnection();
             String sql = "{call sp_LoanType_SelectAll}";
-            CallableStatement calStat = cn.prepareCall(sql,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+            CallableStatement calStat = cn.prepareCall(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             return calStat.executeQuery();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
@@ -76,13 +74,13 @@ public class LoanType {
         }
     }
 
-    public ResultSet getLoanTypeByID() {
+    public ResultSet getLoanTypeByID(int ID) {
         LoanConnection.registerDriver();
         try {
             Connection cn = LoanConnection.createConnection();
             String sql = "{call sp_LoanType_SelectRow(?)}";
             CallableStatement calStat = cn.prepareCall(sql);
-            calStat.setInt(1, getTypeCode());
+            calStat.setInt(1, ID);
             ResultSet rs = calStat.executeQuery();
             return rs;
         } catch (SQLException ex) {
@@ -92,12 +90,12 @@ public class LoanType {
     }
 
     public boolean DelLoanType(int ID) {
-                LoanConnection.registerDriver();
+        LoanConnection.registerDriver();
         try {
             Connection cn = LoanConnection.createConnection();
             String sql = "{call sp_LoanType_DeleteRow(?)}";
             CallableStatement calStat = cn.prepareCall(sql);
-            calStat.setInt(1, getTypeCode());
+            calStat.setInt(1, ID);
             calStat.execute();
             return true;
         } catch (SQLException ex) {
@@ -106,42 +104,51 @@ public class LoanType {
         }
     }
 
-    public boolean InsertLoanType() {
+    public boolean InsertLoanType(String TypeName, float InterestRate, String Des) {
         LoanConnection.registerDriver();
         try {
             Connection cn = LoanConnection.createConnection();
             String sql = "{call sp_LoanType_Insert(?,?,?)}";
             CallableStatement calStat = cn.prepareCall(sql);
-            calStat.setString(1, getTypeName());
-            calStat.setFloat(2, getInterestRate());
-            calStat.setString(3, getDescription());
-            calStat.executeQuery();
-            return true;
+            calStat.setString(1, TypeName);
+            calStat.setFloat(2, InterestRate);
+            calStat.setString(3, Des);
+            return calStat.execute();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
             return false;
         }
     }
 
-    public boolean changeLoanType() {
+    public boolean changeLoanType(int ID, String TypeName, float InterestRate, String Des) {
         LoanConnection.registerDriver();
         try {
             Connection cn = LoanConnection.createConnection();
             String sql = "{call sp_LoanType_Update(?,?,?,?)}";
             CallableStatement calStat = cn.prepareCall(sql);
-            calStat.setInt(1, getTypeCode());
-            calStat.setString(2, getTypeName());
-            calStat.setFloat(3, getInterestRate());
-            calStat.setString(4, getDescription());
-            ResultSet rs = calStat.executeQuery();
-            return true;
+            calStat.setInt(1, ID);
+            calStat.setString(2, TypeName);
+            calStat.setFloat(3, InterestRate);
+            calStat.setString(4, Des);
+            return calStat.execute();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
             return false;
         }
     }
-    
-    public static void main(String[] args) {
-        LoanType lt = new LoanType();
+
+    public int countLoanDetailByLoanTypeID(int ID){
+        LoanConnection.registerDriver();
+        try {
+            Connection cn = LoanConnection.createConnection();
+            String sql = "{call sp_count_LoanDetailsByLoanTypeID(?)}";
+            CallableStatement calStat = cn.prepareCall(sql);
+            calStat.setInt(1, ID);
+            ResultSet rs = calStat.executeQuery();
+            return rs.getInt(1);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+            return 0;
+        }
     }
 }
