@@ -57,8 +57,6 @@ public class Admin {
                CallableStatement cs= cn.prepareCall(sql);
                cs.setString(1,this.getUsername());
                cs.setString(2, this.getPassword());
-               cs.setString(1,this.getUsername()); 
-               cs.setString(2,this.getPassword()); 
                ResultSet rs = cs.executeQuery();
                if(rs.next())
                {
