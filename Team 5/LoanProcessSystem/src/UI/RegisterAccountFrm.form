@@ -53,21 +53,19 @@
                           <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                          <Component id="txtPassword" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="txtRePassword" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="txtName" max="32767" attributes="0"/>
-                                          <Component id="txtBirthDay" max="32767" attributes="0"/>
-                                          <Component id="lblUsername2" alignment="0" min="-2" pref="70" max="-2" attributes="0"/>
-                                          <Component id="lblUsername4" alignment="0" min="-2" pref="70" max="-2" attributes="0"/>
-                                          <Component id="txtEmail" alignment="0" pref="192" max="32767" attributes="0"/>
-                                      </Group>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="txtPassword" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="txtRePassword" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="txtName" alignment="1" max="32767" attributes="0"/>
+                                      <Component id="lblUsername2" alignment="0" min="-2" pref="70" max="-2" attributes="0"/>
+                                      <Component id="lblUsername4" alignment="0" min="-2" pref="70" max="-2" attributes="0"/>
+                                      <Component id="txtEmail" alignment="0" pref="192" max="32767" attributes="0"/>
                                       <Component id="lblUsername5" min="-2" pref="70" max="-2" attributes="0"/>
                                       <Component id="lblUsername1" alignment="0" min="-2" pref="70" max="-2" attributes="0"/>
                                       <Component id="lblUsername10" alignment="0" min="-2" pref="85" max="-2" attributes="0"/>
-                                      <Component id="txtAccountNo" alignment="0" min="-2" pref="192" max="-2" attributes="0"/>
+                                      <Component id="txtAccountNo" alignment="0" pref="192" max="32767" attributes="0"/>
                                       <Component id="btnRegister" alignment="0" min="-2" pref="104" max="-2" attributes="0"/>
+                                      <Component id="dateBirthDay" alignment="0" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
@@ -172,9 +170,9 @@
                       <Component id="lblUsername9" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="txtBirthDay" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtPhone" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="txtPhone" min="-2" max="-2" attributes="0"/>
+                      <Component id="dateBirthDay" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -308,8 +306,6 @@
         </Component>
         <Component class="javax.swing.JTextField" name="txtName">
         </Component>
-        <Component class="javax.swing.JTextField" name="txtBirthDay">
-        </Component>
         <Component class="javax.swing.JTextField" name="txtPhone">
         </Component>
         <Component class="javax.swing.JTextField" name="txtEmail">
@@ -390,6 +386,11 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="33" green="33" red="ff" type="rgb"/>
             </Property>
+          </Properties>
+        </Component>
+        <Component class="com.toedter.calendar.JDateChooser" name="dateBirthDay">
+          <Properties>
+            <Property name="dateFormatString" type="java.lang.String" value="dd-MM-YYYY"/>
           </Properties>
         </Component>
       </SubComponents>

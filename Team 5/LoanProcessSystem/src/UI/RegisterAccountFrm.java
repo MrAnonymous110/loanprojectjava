@@ -6,14 +6,17 @@ package UI;
 
 import Beans.Account;
 import Service.Impl.AccountManagerImpl;
+import Service.Impl.ValidateImpl;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -55,7 +58,6 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
         lblUsername10 = new javax.swing.JLabel();
         txtRePassword = new javax.swing.JPasswordField();
         txtName = new javax.swing.JTextField();
-        txtBirthDay = new javax.swing.JTextField();
         txtPhone = new javax.swing.JTextField();
         txtEmail = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -67,6 +69,7 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
         btnReset = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
         lbMessage = new javax.swing.JLabel();
+        dateBirthDay = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -148,6 +151,8 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
 
         lbMessage.setForeground(new java.awt.Color(255, 51, 51));
 
+        dateBirthDay.setDateFormatString("dd-MM-YYYY");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -162,20 +167,19 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
                         .addGap(22, 22, 22)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(txtPassword, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txtRePassword, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txtName)
-                                        .addComponent(txtBirthDay)
-                                        .addComponent(lblUsername2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(lblUsername4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txtEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtPassword)
+                                    .addComponent(txtRePassword)
+                                    .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblUsername2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblUsername4, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
                                     .addComponent(lblUsername5, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblUsername1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblUsername10, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtAccountNo, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txtAccountNo, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                                    .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(dateBirthDay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(43, 43, 43)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -252,9 +256,9 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
                     .addComponent(lblUsername4)
                     .addComponent(lblUsername9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtBirthDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dateBirthDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblUsername5)
@@ -295,7 +299,6 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
         txtAccountNo.setText("");
         txtAddress.setText("");
         txtName.setText("");
-        txtBirthDay.setText("");
         txtEmail.setText("");
         txtPassword.setText("");
         txtRePassword.setText("");
@@ -308,15 +311,14 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
         // TODO add your handling code here:
         if(isValidate())
-        {
-            try {
+        {      
                 SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd");
                 Account acc= new Account();
                 acc.setAccountNo(txtAccountNo.getText());
                 acc.setPassword(new String(txtPassword.getPassword()));
                 acc.setAddress(txtAddress.getText());
                 acc.setName(txtName.getText());
-                acc.setBirthday(new java.sql.Date(dateFormat.parse(txtBirthDay.getText().trim()).getTime()));              
+                acc.setBirthday(new java.sql.Date(dateBirthDay.getDate().getTime()));              
                 acc.setEmail(txtEmail.getText());
                 acc.setOrganization(txtOrganization.getText());
                 acc.setPhone(txtPhone.getText());
@@ -325,11 +327,6 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
                 accMng.insertRow(acc);
                 btnResetActionPerformed(evt);
                 lbMessage.setText("Successful!");
-                
-            } catch (ParseException ex) {
-                lbMessage.setText("Fail!");
-                return;
-            }
         }
         else
         {
@@ -340,9 +337,11 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
 
     private boolean isValidate()
     {
+       ValidateImpl valid= new ValidateImpl();
+        
        if(txtAccountNo.getText().equals("") || txtPassword.getPassword().length==0
           || txtRePassword.getPassword().length==0 || txtName.getText().equals("")
-          || txtAddress.getText().equals("") || txtBirthDay.getText().equals("")
+          || txtAddress.getText().equals("") 
           || txtEmail.getText().equals("") || txtOrganization.getText().equals("")
           || txtPhone.getText().equals("") || txtSalary.getText().equals("")     
        ){
@@ -356,53 +355,40 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
           lbMessage.setText("Repassword is not valid ");
           return false;
        }
-       // check Format of BirthDay
-       SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd");
-       if (txtBirthDay.getText().trim().length() != dateFormat.toPattern().length()){
-           lbMessage.setText("BirthDay is not valid");
-           return false;
-       }
-        dateFormat.setLenient(false);
-    
-       try {
-           //parse the inDate parameter
-            dateFormat.parse(txtBirthDay.getText().trim());
-       }
-       catch (ParseException pe) {
-            lbMessage.setText("BirthDay is not valid");
-            return false;
-       }
-       
+       // check BirthDay (year old >= 18)
+        java.sql.Date birthDay = new java.sql.Date(dateBirthDay.getDate().getTime());
+        Calendar calendar= GregorianCalendar.getInstance();
+        calendar.setTime(birthDay);
+        int  birthYear = calendar.get(calendar.YEAR);
+        calendar.setTime(getCurentDate());
+        int curentYear= calendar.get(calendar.YEAR);
+        int old= curentYear - birthYear ;
+        if(old<18){
+            lbMessage.setText("your old is'nt enough 18!");
+            return false;    
+        }
        // validate email
-       String regex= "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-       if(!isMatches(txtEmail.getText().trim(), regex)){
-           lbMessage.setText("Email is not valid");
+        if(!valid.isEmail(txtEmail.getText()))
+        {
+           lbMessage.setText("Email not true format");
            return false;
-       }      
+        }
+        
        // validate salary
-       regex="\\d+";
-       if(!isMatches(txtSalary.getText().trim(), regex))
-       {
-           lbMessage.setText("Salary is not positive number ");
+        if(!valid.isNumber(txtSalary.getText()))
+        {
+           lbMessage.setText("Salary is not integer number");
            return false;
-       }
+        }
        //validate Phone Number
-       if(!isMatches(txtPhone.getText().trim(), regex) || txtPhone.getText().trim().length()<10 || txtPhone.getText().trim().length()>12)
-       {
-           lbMessage.setText("Phone is not valid");
-           return false;
-       }
-       return true;
-            
+        if(!valid.isPhone(txtPhone.getText().trim()))
+        {
+            lbMessage.setText("Phone number must is number and length from 10 to 12");
+            return false;
+        }
+       return true;   
     }
-    
-    public boolean isMatches(String str,String regex)
-    {
-       Pattern pattern= Pattern.compile(regex);
-       Matcher matcher= pattern.matcher(str);
-       return matcher.matches();
-    }
-
+   
     public java.sql.Date getCurentDate()
     {
         java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
@@ -415,6 +401,7 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnRegister;
     private javax.swing.JButton btnReset;
+    private com.toedter.calendar.JDateChooser dateBirthDay;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -433,7 +420,6 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
     private javax.swing.JLabel lblUsername9;
     private javax.swing.JTextField txtAccountNo;
     private javax.swing.JTextArea txtAddress;
-    private javax.swing.JTextField txtBirthDay;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextArea txtOrganization;
