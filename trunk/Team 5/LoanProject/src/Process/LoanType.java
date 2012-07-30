@@ -137,7 +137,7 @@ public class LoanType {
         }
     }
 
-    public int countLoanDetailByLoanTypeID(int ID){
+    public int countLoanDetailByLoanTypeID(int ID) {
         LoanConnection.registerDriver();
         try {
             Connection cn = LoanConnection.createConnection();
