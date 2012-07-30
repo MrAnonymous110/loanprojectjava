@@ -8,6 +8,8 @@ import Beans.Account;
 import DbConnection.MSSQLDbConnection;
 import Service.AccountManager;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 
@@ -36,6 +38,7 @@ public class AccountManagerImpl implements AccountManager {
             ResultSet rs = cs.executeQuery();
             return rs.next();
         } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
             return false;
         }
     }
@@ -71,7 +74,7 @@ public class AccountManagerImpl implements AccountManager {
 
     @Override
     public Account selectRow(String AccountNo) {
-         try {
+        try {
             msssqlConnection.registerDriver();
             Connection cn = msssqlConnection.createConnection();
 
@@ -93,9 +96,9 @@ public class AccountManagerImpl implements AccountManager {
                     acc.setPhone(rs.getString("Phone"));
                     acc.setSalary(rs.getInt("Salary"));
                     acc.setRegisterDate(rs.getDate("RegisterDate"));
-                    acc.setBlock(rs.getBoolean("Block"));
-            }
-             return acc;
+                    acc.setStatus(rs.getBoolean("Status"));        
+                 }
+                 return acc;
            }
            else{
                return new Account();
@@ -128,7 +131,7 @@ public class AccountManagerImpl implements AccountManager {
                 account.addElement(rs.getString("Phone"));
                 account.addElement(rs.getInt("Salary"));
                 account.addElement(rs.getDate("RegisterDate"));
-                account.addElement(rs.getBoolean("Block"));
+                account.addElement(rs.getBoolean("Status"));
                 listAccount.addElement(account);
             }
             return listAccount;
@@ -142,16 +145,23 @@ public class AccountManagerImpl implements AccountManager {
         try {
             msssqlConnection.registerDriver();
             Connection cn = msssqlConnection.createConnection();
-
-            String sql = "select * from [Account] where ";
-            sql += "[AccountNo] like '%" + key + "%' ";
-            sql += "or [Name] like '%" + key + "%' ";
-            sql += "or [Organization] like '%" + key + "%' ";
-            sql += "or [Address] like '%" + key + "%' ";
-            sql += "or [Email] like '%" + key + "%' ";
-            sql += "or [Phone] like '%" + key + "%' ";
-            sql += "or [RegisterDate] like '%" + key + "%' ";
-            sql += "or [BirthDay] like '%" + key + "%' ";
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            ValidateImpl valid= new ValidateImpl();
+            String sql = "select * from [Account] where ";   
+            if(valid.isDate(key)){                  
+                 sql += " [RegisterDate] ='"+key+"'";
+                 sql += " or [BirthDay]='"+key+"'";      
+            }
+            else
+            {
+                sql += " [AccountNo] like '%" + key + "%' ";
+                sql += " or [Name] like '%" + key + "%' ";
+                sql += " or [Organization] like '%" + key + "%' ";
+                sql += " or [Address] like '%" + key + "%' ";
+                sql += " or [Email] like '%" + key + "%' ";
+                sql += " or [Phone] like '%" + key + "%' ";
+            }
+            JOptionPane.showMessageDialog(null,sql);
             
             PreparedStatement ps = cn.prepareStatement(sql);
             ResultSet rs= ps.executeQuery();
@@ -168,6 +178,7 @@ public class AccountManagerImpl implements AccountManager {
                 account.addElement(rs.getString("Phone"));
                 account.addElement(rs.getInt("Salary"));
                 account.addElement(rs.getDate("RegisterDate"));
+                account.addElement(rs.getBoolean("Status"));
                 listAccount.addElement(account);
             }
             rs.close();
@@ -199,7 +210,7 @@ public class AccountManagerImpl implements AccountManager {
                     stm.setString(8, acc.getPhone());
                     stm.setInt(9, acc.getSalary());
                     stm.setDate(10, acc.getRegisterDate());
-                    stm.setBoolean(11, acc.isBlock());
+                    stm.setBoolean(11, acc.isStatus());
                     stm.execute();
                 }
                

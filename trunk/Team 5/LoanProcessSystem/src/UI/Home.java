@@ -70,18 +70,19 @@ public class Home extends javax.swing.JFrame {
         setMaximumSize(new java.awt.Dimension(647, 473));
         setMinimumSize(new java.awt.Dimension(647, 473));
 
-        jPanel1.setBackground(new java.awt.Color(255, 51, 51));
+        jPanel1.setBackground(new java.awt.Color(3, 83, 172));
+        jPanel1.setForeground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setFont(new java.awt.Font(".VnAristoteH", 1, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 102, 102));
+        jLabel1.setForeground(new java.awt.Color(204, 255, 255));
         jLabel1.setText("Loan Process System");
         jPanel1.add(jLabel1);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
-        jPanel2.setBackground(new java.awt.Color(204, 255, 204));
+        jPanel2.setBackground(new java.awt.Color(204, 255, 255));
 
-        pnLoans.setBackground(new java.awt.Color(255, 51, 51));
+        pnLoans.setBackground(new java.awt.Color(3, 83, 172));
         pnLoans.setPreferredSize(new java.awt.Dimension(204, 217));
         pnLoans.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -123,7 +124,7 @@ public class Home extends javax.swing.JFrame {
                 .addGap(5, 5, 5))
         );
 
-        pnAdmin.setBackground(new java.awt.Color(255, 51, 51));
+        pnAdmin.setBackground(new java.awt.Color(3, 83, 172));
         pnAdmin.setPreferredSize(new java.awt.Dimension(204, 217));
         pnAdmin.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -165,7 +166,7 @@ public class Home extends javax.swing.JFrame {
                 .addGap(5, 5, 5))
         );
 
-        pnBranches.setBackground(new java.awt.Color(255, 51, 51));
+        pnBranches.setBackground(new java.awt.Color(3, 83, 172));
         pnBranches.setPreferredSize(new java.awt.Dimension(204, 217));
         pnBranches.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -210,7 +211,7 @@ public class Home extends javax.swing.JFrame {
                 .addGap(5, 5, 5))
         );
 
-        pnFines.setBackground(new java.awt.Color(255, 51, 51));
+        pnFines.setBackground(new java.awt.Color(3, 83, 172));
         pnFines.setPreferredSize(new java.awt.Dimension(204, 217));
         pnFines.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -255,7 +256,7 @@ public class Home extends javax.swing.JFrame {
                 .addGap(5, 5, 5))
         );
 
-        pnExit.setBackground(new java.awt.Color(255, 51, 51));
+        pnExit.setBackground(new java.awt.Color(3, 83, 172));
         pnExit.setPreferredSize(new java.awt.Dimension(204, 217));
         pnExit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -299,7 +300,7 @@ public class Home extends javax.swing.JFrame {
                 .addComponent(lbExit, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        pnHelp.setBackground(new java.awt.Color(255, 51, 51));
+        pnHelp.setBackground(new java.awt.Color(3, 83, 172));
         pnHelp.setPreferredSize(new java.awt.Dimension(204, 217));
         pnHelp.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -341,7 +342,7 @@ public class Home extends javax.swing.JFrame {
                 .addGap(5, 5, 5))
         );
 
-        pnBills.setBackground(new java.awt.Color(255, 51, 51));
+        pnBills.setBackground(new java.awt.Color(3, 83, 172));
         pnBills.setPreferredSize(new java.awt.Dimension(204, 217));
         pnBills.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -383,7 +384,7 @@ public class Home extends javax.swing.JFrame {
                 .addGap(5, 5, 5))
         );
 
-        pnAccount.setBackground(new java.awt.Color(255, 51, 51));
+        pnAccount.setBackground(new java.awt.Color(3, 83, 172));
         pnAccount.setPreferredSize(new java.awt.Dimension(204, 217));
         pnAccount.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -493,7 +494,7 @@ public class Home extends javax.swing.JFrame {
     private void pnLoansMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnLoansMouseExited
         // TODO add your handling code here:
         pnLoans.setBorder(null);
-        pnLoans.setBackground(new Color(255, 51, 51));
+        pnLoans.setBackground(defaultcolor);
     }//GEN-LAST:event_pnLoansMouseExited
 
     private void pnAdminMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnAdminMouseEntered
@@ -505,7 +506,7 @@ public class Home extends javax.swing.JFrame {
     private void pnAdminMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnAdminMouseExited
         // TODO add your handling code here:
         pnAdmin.setBorder(null);
-        pnAdmin.setBackground(new Color(255, 51, 51));
+        pnAdmin.setBackground(defaultcolor);
     }//GEN-LAST:event_pnAdminMouseExited
 
     private void pnBranchesMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnBranchesMouseEntered

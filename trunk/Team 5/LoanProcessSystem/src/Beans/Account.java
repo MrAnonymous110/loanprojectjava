@@ -28,7 +28,7 @@ public class Account {
     private String phone;
     private int salary;
     private Date registerDate;
-    private boolean block;
+    private boolean status;
 
     public Account() {
     }
@@ -113,11 +113,11 @@ public class Account {
         this.salary = salary;
     }
 
-    public boolean isBlock() {
-        return block;
+    public boolean isStatus() {
+        return status;
     }
 
-    public void setBlock(boolean block) {
-        this.block = block;
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

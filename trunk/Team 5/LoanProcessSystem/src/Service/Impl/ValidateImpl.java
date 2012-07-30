@@ -16,6 +16,9 @@ import java.util.regex.Pattern;
  */
 public class ValidateImpl implements Validate {
 
+    public ValidateImpl()
+    {}
+    
     @Override
     public boolean isEmail(String email) {
        String regex= "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";

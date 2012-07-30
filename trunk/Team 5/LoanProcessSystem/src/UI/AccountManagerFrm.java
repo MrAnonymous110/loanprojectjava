@@ -6,8 +6,11 @@ package UI;
 
 import Beans.Account;
 import Service.Impl.AccountManagerImpl;
+import Service.Impl.ValidateImpl;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,7 +54,7 @@ public class AccountManagerFrm extends javax.swing.JFrame {
         column.addElement("Phone");
         column.addElement("Salary");
         column.addElement("RegisterDate");
-
+        column.addElement("Status");
         reloadData();
     }
 
@@ -79,6 +82,8 @@ public class AccountManagerFrm extends javax.swing.JFrame {
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
         btnDetails = new javax.swing.JButton();
+        lblUsername10 = new javax.swing.JLabel();
+        cbStatus = new javax.swing.JComboBox();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblAccountList = new javax.swing.JTable();
@@ -88,7 +93,6 @@ public class AccountManagerFrm extends javax.swing.JFrame {
         lblUsername1 = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
         lblUsername2 = new javax.swing.JLabel();
-        txtBirthDay = new javax.swing.JTextField();
         lblUsername3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtOrganization = new javax.swing.JTextArea();
@@ -106,6 +110,9 @@ public class AccountManagerFrm extends javax.swing.JFrame {
         btnSave = new javax.swing.JButton();
         lbMessage = new javax.swing.JLabel();
         btnNew = new javax.swing.JButton();
+        dateBirthDay = new com.toedter.calendar.JDateChooser();
+        lblUsername9 = new javax.swing.JLabel();
+        chkStatus = new javax.swing.JCheckBox();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mnOpen = new javax.swing.JMenuItem();
@@ -120,6 +127,7 @@ public class AccountManagerFrm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Account Manager");
+        setPreferredSize(new java.awt.Dimension(940, 594));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new java.awt.BorderLayout());
@@ -127,6 +135,7 @@ public class AccountManagerFrm extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setPreferredSize(new java.awt.Dimension(671, 59));
 
+        txtSearch.setToolTipText("Enter key search");
         txtSearch.setPreferredSize(new java.awt.Dimension(6, 23));
 
         btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Search1.jpg"))); // NOI18N
@@ -145,6 +154,17 @@ public class AccountManagerFrm extends javax.swing.JFrame {
             }
         });
 
+        lblUsername10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblUsername10.setText("Status");
+
+        cbStatus.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All", "Adopted", "Block" }));
+        cbStatus.setPreferredSize(new java.awt.Dimension(66, 25));
+        cbStatus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbStatusActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -152,20 +172,26 @@ public class AccountManagerFrm extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(209, 209, 209)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 289, Short.MAX_VALUE)
+                .addComponent(lblUsername10, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnSearch)
-                .addContainerGap(523, Short.MAX_VALUE))
+                .addGap(248, 248, 248))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSearch)
-                    .addComponent(btnDetails))
+                    .addComponent(btnDetails)
+                    .addComponent(lblUsername10)
+                    .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -176,20 +202,20 @@ public class AccountManagerFrm extends javax.swing.JFrame {
 
         tblAccountList.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "AccountNo", "Name", "BirthDay", "Organization", "Address", "Email", "Phone", "Salary", "RegisterDate"
+                "AccountNo", "Name", "BirthDay", "Organization", "Address", "Email", "Phone", "Salary", "RegisterDate", "Status"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -270,6 +296,11 @@ public class AccountManagerFrm extends javax.swing.JFrame {
             }
         });
 
+        dateBirthDay.setDateFormatString("dd-MM-yyyy");
+
+        lblUsername9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblUsername9.setText("Status");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -278,13 +309,26 @@ public class AccountManagerFrm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtName)
-                    .addComponent(txtBirthDay)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
                     .addComponent(jScrollPane3)
+                    .addComponent(dateBirthDay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(lblUsername5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(13, 13, 13)
                         .addComponent(txtEmail))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblUsername6, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblUsername7, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtSalary, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+                            .addComponent(txtPhone)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(btnNew)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnSave)
+                        .addGap(21, 21, 21))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblUsername1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -299,21 +343,12 @@ public class AccountManagerFrm extends javax.swing.JFrame {
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txtAccountNo)
                                     .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)))
-                            .addComponent(lbMessage))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(lblUsername7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                            .addComponent(lblUsername6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbMessage)
                             .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(0, 6, Short.MAX_VALUE)
-                                .addComponent(btnNew)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnSave))
-                            .addComponent(txtSalary, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtPhone))))
+                                .addComponent(lblUsername9, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(13, 13, 13)
+                                .addComponent(chkStatus)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -334,8 +369,8 @@ public class AccountManagerFrm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblUsername2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtBirthDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(dateBirthDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
                 .addComponent(lblUsername3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -355,11 +390,15 @@ public class AccountManagerFrm extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblUsername7)
                     .addComponent(txtSalary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblUsername9, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(chkStatus, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSave)
-                    .addComponent(btnNew))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                    .addComponent(btnNew)
+                    .addComponent(btnSave))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbMessage)
                 .addContainerGap())
         );
@@ -475,12 +514,13 @@ public class AccountManagerFrm extends javax.swing.JFrame {
         txtAccountNo.setEditable(true);
         resetTextForm();
     }//GEN-LAST:event_btnNewActionPerformed
-    // reset text for form information
+    /*
+     * reset text for form information
+     */
     private void resetTextForm() {
         txtAccountNo.setText("");
         txtPassword.setText("");
         txtName.setText("");
-        txtBirthDay.setText("");
         txtOrganization.setText("");
         txtAddress.setText("");
         txtEmail.setText("");
@@ -489,20 +529,23 @@ public class AccountManagerFrm extends javax.swing.JFrame {
     }
    // method process button save and menu save
     private void save() {
-        // TODO add your handling code here:
+        // insert or update
         if (isValidate()) {
             if (txtAccountNo.isEditable()) {
                 // insert new Account        
                setAccountDefault();
                accDefault.setRegisterDate(getCurentDate());
                accMng.insertRow(accDefault);  
-                lbMessage.setText("Successful!");
+               lbMessage.setText("Successful!");
             } else {
+               // update
                setAccountDefault();
                accMng.updateRow(accDefault);
                lbMessage.setText("Successful!");
             }
+            reloadData();
         }
+        
     }
     
     private void tblAccountListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAccountListMouseClicked
@@ -511,47 +554,37 @@ public class AccountManagerFrm extends javax.swing.JFrame {
         if (index > -1) {
             try {
                 Vector acc = (Vector) list.get(index);
+                // input value to the form
                 txtAccountNo.setText(acc.get(0).toString());
                 txtPassword.setText(acc.get(1).toString());
                 txtName.setText(acc.get(2).toString());
-                txtBirthDay.setText(acc.get(3).toString());
+                dateBirthDay.setDate(dateFormat.parse(acc.get(3).toString()));
                 txtOrganization.setText(acc.get(4).toString());
                 txtAddress.setText(acc.get(5).toString());
                 txtEmail.setText(acc.get(6).toString());
                 txtPhone.setText(acc.get(7).toString());
                 txtSalary.setText(acc.get(8).toString());
-               
-                accDefault.setAccountNo(acc.get(0).toString());
-                accDefault.setPassword(acc.get(1).toString());
-                accDefault.setName(acc.get(2).toString());
-                accDefault.setBirthday(new java.sql.Date(dateFormat.parse(acc.get(3).toString()).getTime()));
-                accDefault.setOrganization(acc.get(4).toString());
-                accDefault.setAddress(acc.get(5).toString());
-                accDefault.setEmail(acc.get(6).toString());
-                accDefault.setPhone(acc.get(7).toString());
-                accDefault.setSalary(Integer.parseInt(acc.get(8).toString()));
+                chkStatus.setSelected((boolean)acc.get(10));
+                
+               // set registerDate for accDefault  
                 accDefault.setRegisterDate(new java.sql.Date(dateFormat.parse(acc.get(9).toString()).getTime()));
             } catch (ParseException ex) {
-                Logger.getLogger(AccountManagerFrm.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null,"Has error:"+ ex.getMessage());
             }
         }
     }//GEN-LAST:event_tblAccountListMouseClicked
    // set value from form Information to object accDefault 
     private void setAccountDefault() {
-        try {
-
             accDefault.setAccountNo(txtAccountNo.getText());
             accDefault.setPassword(new String(txtPassword.getPassword()));
             accDefault.setAddress(txtAddress.getText());
             accDefault.setName(txtName.getText());
-            accDefault.setBirthday(new java.sql.Date(dateFormat.parse(txtBirthDay.getText().trim()).getTime()));
+            accDefault.setBirthday(new java.sql.Date(dateBirthDay.getDate().getTime()));
             accDefault.setEmail(txtEmail.getText());
             accDefault.setOrganization(txtOrganization.getText());
             accDefault.setPhone(txtPhone.getText());
             accDefault.setSalary(Integer.parseInt(txtSalary.getText()));
-        } catch (ParseException ex) {
-            Logger.getLogger(AccountManagerFrm.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            accDefault.setStatus(chkStatus.isSelected());
     }
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
@@ -560,7 +593,7 @@ public class AccountManagerFrm extends javax.swing.JFrame {
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         // TODO add your handling code here:
-        list= accMng.search(txtSearch.getText());  
+        list= accMng.search(txtSearch.getText().trim());  
         TableModel model = new DefaultTableModel(list, column);
         tblAccountList.setModel(model);
         tblAccountList.removeColumn(tblAccountList.getColumn("Password")); 
@@ -582,58 +615,87 @@ public class AccountManagerFrm extends javax.swing.JFrame {
         reloadData();
     }//GEN-LAST:event_mnRefreshActionPerformed
 
+    private void cbStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStatusActionPerformed
+        // select change conbobox
+        boolean val;
+        if(cbStatus.getSelectedIndex()==1)
+            val= true;
+        else if(cbStatus.getSelectedIndex()==2)
+            val= false;
+        else{
+            TableModel model = new DefaultTableModel(list, column);
+            tblAccountList.setModel(model);
+            tblAccountList.removeColumn(tblAccountList.getColumn("Password"));
+            return;
+        }             
+        Vector smallList = new Vector();
+        for(Object ob : list)
+        {
+           Vector row = (Vector)ob;
+           if((boolean)row.get(10)== val)
+           {
+              smallList.addElement(row);
+           }
+        }
+        TableModel model = new DefaultTableModel(smallList, column);
+        tblAccountList.setModel(model);
+        tblAccountList.removeColumn(tblAccountList.getColumn("Password"));
+    }//GEN-LAST:event_cbStatusActionPerformed
+
+    /*
+     * validate form information
+     * return true or false
+     */
     private boolean isValidate() {
-        if (txtAccountNo.getText().equals("") || txtPassword.getPassword().length == 0
-                || txtName.getText().equals("")
-                || txtAddress.getText().equals("") || txtBirthDay.getText().equals("")
-                || txtEmail.getText().equals("") || txtOrganization.getText().equals("")
-                || txtPhone.getText().equals("") || txtSalary.getText().equals("")) {
-            lbMessage.setText("Can not register because has textbox is null");
+       ValidateImpl valid= new ValidateImpl();
+        
+       if(txtAccountNo.getText().equals("") || txtPassword.getPassword().length==0
+          || txtName.getText().equals("")
+          || txtAddress.getText().equals("") 
+          || txtEmail.getText().equals("") || txtOrganization.getText().equals("")
+          || txtPhone.getText().equals("") || txtSalary.getText().equals("")     
+       ){
+          lbMessage.setText("Can not register because has textbox is null");
+          return false;
+       }
+       
+       // check BirthDay (year old >= 18)
+        java.sql.Date birthDay = new java.sql.Date(dateBirthDay.getDate().getTime());
+        Calendar calendar= GregorianCalendar.getInstance();
+        calendar.setTime(birthDay);
+        int  birthYear = calendar.get(Calendar.YEAR);
+        calendar.setTime(getCurentDate());
+        int curentYear= calendar.get(Calendar.YEAR);
+        int old= curentYear - birthYear ;
+        if(old<18){
+            lbMessage.setText("your old is'nt enough 18!");
+            return false;    
+        }
+       // validate email
+        if(!valid.isEmail(txtEmail.getText()))
+        {
+           lbMessage.setText("Email not true format");
+           return false;
+        }
+        
+       // validate salary
+        if(!valid.isNumber(txtSalary.getText()))
+        {
+           lbMessage.setText("Salary is not integer number");
+           return false;
+        }
+       //validate Phone Number
+        if(!valid.isPhone(txtPhone.getText().trim()))
+        {
+            lbMessage.setText("Phone number must is number and length from 10 to 12");
             return false;
         }
-        // check Format of BirthDay
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        if (txtBirthDay.getText().trim().length() != dateFormat.toPattern().length()) {
-            lbMessage.setText("BirthDay is not valid");
-            return false;
-        }
-        dateFormat.setLenient(false);
-
-        try {
-            //parse the inDate parameter
-            dateFormat.parse(txtBirthDay.getText().trim());
-        } catch (ParseException pe) {
-            lbMessage.setText("BirthDay is not valid");
-            return false;
-        }
-
-        // validate email
-        String regex = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-        if (!isMatches(txtEmail.getText().trim(), regex)) {
-            lbMessage.setText("Email is not valid");
-            return false;
-        }
-        // validate salary
-        regex = "\\d+";
-        if (!isMatches(txtSalary.getText().trim(), regex)) {
-            lbMessage.setText("Salary is not positive number ");
-            return false;
-        }
-        //validate Phone Number
-        if (!isMatches(txtPhone.getText().trim(), regex) || txtPhone.getText().trim().length() < 10 || txtPhone.getText().trim().length() > 12) {
-            lbMessage.setText("Phone is not valid");
-            return false;
-        }
-        return true;
-
+       return true;   
     }
 
-    public boolean isMatches(String str, String regex) {
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(str);
-        return matcher.matches();
-    }
-
+    /*
+     * return curentDate
+     */
     public java.sql.Date getCurentDate() {
         java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
         return sqlDate;
@@ -644,6 +706,9 @@ public class AccountManagerFrm extends javax.swing.JFrame {
     private javax.swing.JButton btnNew;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSearch;
+    private javax.swing.JComboBox cbStatus;
+    private javax.swing.JCheckBox chkStatus;
+    private com.toedter.calendar.JDateChooser dateBirthDay;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
@@ -660,6 +725,7 @@ public class AccountManagerFrm extends javax.swing.JFrame {
     private javax.swing.JLabel lbMessage;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JLabel lblUsername1;
+    private javax.swing.JLabel lblUsername10;
     private javax.swing.JLabel lblUsername2;
     private javax.swing.JLabel lblUsername3;
     private javax.swing.JLabel lblUsername4;
@@ -667,6 +733,7 @@ public class AccountManagerFrm extends javax.swing.JFrame {
     private javax.swing.JLabel lblUsername6;
     private javax.swing.JLabel lblUsername7;
     private javax.swing.JLabel lblUsername8;
+    private javax.swing.JLabel lblUsername9;
     private javax.swing.JMenuItem mnExit;
     private javax.swing.JMenuItem mnNew;
     private javax.swing.JMenuItem mnOpen;
@@ -675,7 +742,6 @@ public class AccountManagerFrm extends javax.swing.JFrame {
     private javax.swing.JTable tblAccountList;
     private javax.swing.JTextField txtAccountNo;
     private javax.swing.JTextArea txtAddress;
-    private javax.swing.JTextField txtBirthDay;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextArea txtOrganization;

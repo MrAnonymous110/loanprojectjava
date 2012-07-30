@@ -16,18 +16,18 @@ import java.util.logging.Logger;
  */
 public class BillType {
 
-    private int typeCode;
+    private int typeID;
     private String typeName;
 
     public BillType() {
     }
 
-    public int getTypeCode() {
-        return typeCode;
+    public int getTypeID() {
+        return typeID;
     }
 
-    public void setTypeCode(int typeCode) {
-        this.typeCode = typeCode;
+    public void setTypeID(int typeID) {
+        this.typeID = typeID;
     }
 
     public String getTypeName() {
@@ -37,6 +37,5 @@ public class BillType {
     public void setTypeName(String typeName) {
         this.typeName = typeName;
     }
-
-     
+  
 }

@@ -28,6 +28,7 @@ public class LoginFrm extends javax.swing.JFrame {
         this.homeForm=homeForm;
         this.accForm=accForm;
         adminMng = new AdminManagerImpl();
+        accountMng= new AccountManagerImpl();
     }
 
     /**
@@ -202,26 +203,37 @@ public class LoginFrm extends javax.swing.JFrame {
                if(adminMng.isExisted(txtUsername.getText().trim(),new String(txtPassword.getPassword())))
                {
                   homeForm.admin= adminMng.selectRow(txtUsername.getText().trim());
-                  homeForm.setVisible(true);            
+                  homeForm.setVisible(true);         
+                  homeForm.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                  homeForm.setLocationRelativeTo(null);
                   this.dispose();
                }
-               
+               else
+                   lbMessage.setText("Username or password invalid");
             }
             else
             {     
                if(accountMng.isExisted(txtUsername.getText().trim(),new String(txtPassword.getPassword())))
                {
                   accForm.acc= accountMng.selectRow(txtUsername.getText().trim());
-                  accForm.setVisible(true);            
+                  accForm.setVisible(true);  
+                  accForm.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                  accForm.setLocationRelativeTo(null);
                   this.dispose();
                }
+               else
+                   lbMessage.setText("AccountNo or password invalid");
             }
         }
     }//GEN-LAST:event_btLoginActionPerformed
 
     private void btRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRegisterActionPerformed
         // TODO add your handling code here:
-        new RegisterAccountFrm().setVisible(true);
+        RegisterAccountFrm form= new RegisterAccountFrm();
+        form.setVisible(true);
+        form.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        form.setLocationRelativeTo(null);
+       
     }//GEN-LAST:event_btRegisterActionPerformed
 
     private boolean isValidate()
