@@ -85,7 +85,4 @@ public class LoanDetails {
     public void setTypeCode(String typeCode) {
         this.typeCode = typeCode;
     }
-
-    
-    
 }

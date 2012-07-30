@@ -1,5 +1,6 @@
 
 import Beans.LoanType;
+import Service.Impl.LoanTypeImp;
 import com.sun.corba.se.impl.io.TypeMismatchException;
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -21,7 +22,7 @@ public class LoanTypeManager extends JFrame {
 
     private DefaultTableModel model;
     private JTable table;
-    private LoanType LT;
+    private LoanTypeImp LT;
     private ResultSet rs;
 
     public LoanTypeManager() {
@@ -59,6 +60,8 @@ public class LoanTypeManager extends JFrame {
 
                     } catch (NumberFormatException ex) {
                         JOptionPane.showMessageDialog(null, "wrong type input");
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(null, ex.getMessage());
                     }
                 }
             }
@@ -162,10 +165,10 @@ public class LoanTypeManager extends JFrame {
     }
 
     private void loadData() throws HeadlessException {
-        LT = new LoanType();
-        rs = LT.getAllLoanType();
-        model = new DefaultTableModel();
         try {
+            LT = new LoanTypeImp();
+            rs = LT.getAllLoanType();
+            model = new DefaultTableModel();
             ResultSetMetaData RSmetaData = rs.getMetaData();
             int colNum = RSmetaData.getColumnCount();
             for (int i = 2; i < colNum + 1; i++) {
