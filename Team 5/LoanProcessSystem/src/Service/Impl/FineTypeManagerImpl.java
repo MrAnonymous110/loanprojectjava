@@ -54,4 +54,26 @@ public class FineTypeManagerImpl implements FineTypeManager {
     public boolean Update(FineType fineType) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public Vector GetDataFromColumn(String ColName) {
+        try {
+            msssqlConnection.registerDriver();
+            Connection cn = msssqlConnection.createConnection();
+            String sql = "Select ["+ColName+"] From [FineType]";
+            PreparedStatement ps = cn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            Vector list = new Vector();
+            while (rs.next()) {
+                Vector fineType = new Vector();
+//                fineType.addElement(rs.getInt("TypeID"));
+//                fineType.addElement(rs.getInt("Fine"));
+                fineType.addElement(rs.getString(ColName));
+                list.addElement(fineType);
+            }
+            return list;
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
 }
