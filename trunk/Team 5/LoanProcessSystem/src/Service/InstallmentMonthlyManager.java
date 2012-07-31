@@ -4,6 +4,7 @@
  */
 package Service;
 
+import Beans.InstallmentMonthly;
 import java.util.Vector;
 
 /**
@@ -12,5 +13,8 @@ import java.util.Vector;
  */
 public interface InstallmentMonthlyManager {
     public Vector GetListFromTable(String sql);
-    public boolean Insert();
+    public boolean InsertBasic(InstallmentMonthly IstMonthly);
+    public void InsertInstallmentMonthly(String CustomerID, Float Rate);
+    public String GetLastPayDate(String CustomerID);
+    public Float[] CalMonthlyRateMoney(int CountMonth, Float Rate, Float LoanMoney);
 }

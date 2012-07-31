@@ -7,24 +7,21 @@ package Service.Impl;
 import Beans.InstallmentMonthly;
 import DbConnection.MSSQLDbConnection;
 import Service.InstallmentMonthlyManager;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Vector;
+import javax.swing.JOptionPane;
+import sun.security.action.GetLongAction;
 
 /**
  *
  * @author babman92
  */
-public class InstallmentMonthlyManagerImpl implements InstallmentMonthlyManager {
+public class InstallmentMonthlyManagerImpl extends FineDetailManagerImpl implements InstallmentMonthlyManager {
 
     MSSQLDbConnection msssqlConnection;
-    InstallmentMonthly IstMonthly;
-    
+
     public InstallmentMonthlyManagerImpl() {
         msssqlConnection = new MSSQLDbConnection();
-        IstMonthly = new InstallmentMonthly();
     }
 
     @Override
@@ -45,6 +42,7 @@ public class InstallmentMonthlyManagerImpl implements InstallmentMonthlyManager 
                 Duration.addElement(rs.getInt("State"));
                 list.addElement(Duration);
             }
+            rs.close();
             cn.close();
             return list;
         } catch (SQLException ex) {
@@ -53,7 +51,7 @@ public class InstallmentMonthlyManagerImpl implements InstallmentMonthlyManager 
     }
 
     @Override
-    public boolean Insert() {
+    public boolean InsertBasic(InstallmentMonthly IstMonthly) {
         try {
             msssqlConnection.registerDriver();
             Connection cn = msssqlConnection.createConnection();
@@ -66,6 +64,8 @@ public class InstallmentMonthlyManagerImpl implements InstallmentMonthlyManager 
             stm.setDate(5, IstMonthly.getPayDate());
             stm.setInt(6, IstMonthly.getState());
             int count = stm.executeUpdate();
+            stm.close();
+            cn.close();
             if (count > 0) {
                 return true;
             } else {
@@ -75,4 +75,87 @@ public class InstallmentMonthlyManagerImpl implements InstallmentMonthlyManager 
             return false;
         }
     }
+
+    @Override
+    public void InsertInstallmentMonthly(String CustomerID, Float Rate) {
+        Vector Duration = GetListLoanDetail("Select [BeginTime], [EndTime],[LoanMoney],[CurentMoney],[AccountNo] From [LoanDetails] Where [AccountNo] = '"+CustomerID+"'");
+        String BeginDateStr = ((Vector) Duration.elementAt(0)).get(0).toString();
+        String FinishDateStr = ((Vector) Duration.elementAt(0)).get(1).toString();
+        Float LoanMoney = Float.parseFloat(((Vector) Duration.elementAt(0)).get(2).toString());
+        int[] datetimeBegin = GetDateFromString(BeginDateStr);
+        int[] datetimeFinish = GetDateFromString(FinishDateStr);
+        int[] datetimeNow = GetDateFromString(GetDateTimeNow());
+        int[] LastPayDate = GetDateFromString(GetLastPayDate(CustomerID));
+        boolean flag = true;
+        if (LastPayDate[2] > datetimeNow[2]) {
+            flag = false;
+        }
+        int countMonth = CalCountMonthOfLoan(datetimeBegin, datetimeFinish);
+        Date[] payDate = new Date[countMonth];
+        int MonthBegin = datetimeBegin[1];
+        int[] Count = new int[countMonth];
+        for (int i = 0; i < countMonth; i++) {
+            Count[i] = MonthBegin + i + 1;
+            if (Count[i] == 13) {
+                Count[i] = 1;
+                datetimeBegin[2] += 1;
+                MonthBegin = 0 - i;
+            }
+            payDate[i] = Date.valueOf(datetimeBegin[2] + "-" + Count[i] + "-" + datetimeBegin[0]);
+        }
+        //Float[] MonthlyAllInstallment = CalMonthlyAllInstallment(countMonth, Rate, LoanMoney);
+        Float[] MonthlyRate = CalMonthlyRateMoney(countMonth, Rate, LoanMoney);
+        Float MoneyRoot = LoanMoney / countMonth;
+        InstallmentMonthly IstMonthly = new InstallmentMonthly();
+        if (flag) {
+            for (int i = 0; i < countMonth; i++) {
+                IstMonthly.setCustomerID(CustomerID);
+                IstMonthly.setMoneyRoot(MoneyRoot);
+                IstMonthly.setPayDate(payDate[i]);
+                IstMonthly.setRateInterestMonney(MonthlyRate[i]);
+                IstMonthly.setTotal(IstMonthly.getMoneyRoot() + IstMonthly.getRateInterestMonney());
+                IstMonthly.setState(0);
+                InsertBasic(IstMonthly);
+            }
+        }
+    }
+
+    @Override
+    public String GetLastPayDate(String CustomerID) {
+        String sql = "SELECT TOP 1 PayDate FROM [InstallmentMonthly] Where [State] = 0 And [CustomerID] = '"+CustomerID+"' Order by [ID] desc";
+        try {
+            msssqlConnection.registerDriver();
+            Connection cn = msssqlConnection.createConnection();
+            PreparedStatement stm = cn.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            Vector list = new Vector();
+            while (rs.next()) {
+                Vector Duration = new Vector();
+                Duration.addElement(rs.getDate("PayDate"));
+                list.addElement(Duration);
+            }
+            stm.close();
+            cn.close();
+            if (list.isEmpty()) {
+                return "1900-01-01";
+            }
+            String LastPayDate = list.elementAt(0).toString().replace("[", "").replace("]", "");
+            return LastPayDate;
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+
+    @Override
+    public Float[] CalMonthlyRateMoney(int CountMonth, Float Rate, Float LoanMoney) {
+        Float[] RateMonthly = new Float[CountMonth];
+        Float MonthlyRoot = LoanMoney / CountMonth;
+        Float CurrentMoney = LoanMoney;
+        for (int i = 0; i < CountMonth; i++) {
+            RateMonthly[i] = (CurrentMoney) * Rate;
+            CurrentMoney = CurrentMoney - MonthlyRoot;
+        }
+        return RateMonthly;
+    }
+
 }

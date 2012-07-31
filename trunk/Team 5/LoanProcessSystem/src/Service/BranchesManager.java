@@ -25,7 +25,7 @@ public interface BranchesManager {
     public Vector GetListFromTable(String sql);
     
     //Get One Column From Table
-    public Vector GetColumnFromTable();
+    public Vector GetColumnFromTable(String ColName);
     
     // Search Record From Table Branches
     public Vector Search(String searchStr, int index);

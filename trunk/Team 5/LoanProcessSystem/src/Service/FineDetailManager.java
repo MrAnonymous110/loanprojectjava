@@ -32,5 +32,6 @@ public interface FineDetailManager {
     public String GetDateTimeNow();
     
     // Get Data From LoansDetails
-    public Vector GetListLoanDetail();
+    public Vector GetListLoanDetail(String sql);
+    
 }

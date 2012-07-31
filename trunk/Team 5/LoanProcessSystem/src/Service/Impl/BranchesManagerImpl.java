@@ -123,17 +123,17 @@ public class BranchesManagerImpl implements BranchesManager {
     }
 
     @Override
-    public Vector GetColumnFromTable() {
+    public Vector GetColumnFromTable(String ColName) {
         try {
             msssqlConnection.registerDriver();
             Connection cn = msssqlConnection.createConnection();
-            String sql = "Select [Name] From [Branches]";
+            String sql = "Select ["+ColName+"] From [Branches]";
             PreparedStatement ps = cn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             Vector list = new Vector();
             while (rs.next()) {
                 Vector Name = new Vector();
-                Name.addElement(rs.getString("Name"));
+                Name.addElement(rs.getString(ColName));
                 list.addElement(Name);
             }
             return list;

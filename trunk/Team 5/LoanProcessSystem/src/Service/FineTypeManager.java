@@ -15,4 +15,5 @@ public interface FineTypeManager {
     public Vector GetDataFromTable(int finType);
     public boolean Insert(FineType fineType);
     public boolean Update(FineType fineType);
+    public Vector GetDataFromColumn(String ColName);
 }

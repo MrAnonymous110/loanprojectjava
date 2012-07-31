@@ -15,6 +15,8 @@ import java.util.GregorianCalendar;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 /**
@@ -25,10 +27,9 @@ public class FineDetailManagerImpl implements FineDetailManager {
 
     MSSQLDbConnection msssqlConnection;
     InstallmentMonthlyManagerImpl InsMonthlyImpl;
-    
+
     public FineDetailManagerImpl() {
         msssqlConnection = new MSSQLDbConnection();
-        InsMonthlyImpl = new InstallmentMonthlyManagerImpl();
     }
 
     @Override
@@ -44,6 +45,7 @@ public class FineDetailManagerImpl implements FineDetailManager {
             cs.setString(4, fine.getDescription());
             cs.setDate(5, fine.getDatetime());
             int count = cs.executeUpdate();
+            cs.close();
             cn.close();
             if (count > 0) {
                 return true;
@@ -162,6 +164,7 @@ public class FineDetailManagerImpl implements FineDetailManager {
 
     @Override
     public void CalFine() {
+        InsMonthlyImpl = new InstallmentMonthlyManagerImpl();
         int[] datetimeCurrent = GetDateFromString(GetDateTimeNow());
         String sql = "Select * from [InstallmentMonthly] Where [State]='" + 0 + "'";
         Vector InstallmentMonthly = InsMonthlyImpl.GetListFromTable(sql);
@@ -232,11 +235,10 @@ public class FineDetailManagerImpl implements FineDetailManager {
     }
 
     @Override
-    public Vector GetListLoanDetail() {
+    public Vector GetListLoanDetail(String sql) {
         try {
             msssqlConnection.registerDriver();
             Connection cn = msssqlConnection.createConnection();
-            String sql = "";
             PreparedStatement stm = cn.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
             Vector list = new Vector();
@@ -248,9 +250,12 @@ public class FineDetailManagerImpl implements FineDetailManager {
                 Duration.addElement(rs.getFloat("CurentMoney"));
                 list.addElement(Duration);
             }
+            rs.close();
+            cn.close();
             return list;
         } catch (SQLException ex) {
             return null;
         }
     }
+
 }
