@@ -44,32 +44,33 @@ public class AccountManagerImpl implements AccountManager {
     }
 
     @Override
-    public void insertRow(Account acc) {
-        if (!this.isExisted(acc.getAccountNo(),acc.getPassword())) {
+    public boolean insertRow(Account acc) {     
             try {
                 msssqlConnection.registerDriver();
                 Connection cn = msssqlConnection.createConnection();
-
-                String sql = "{call sp_Account_Insert(?,?,?,?,?,?,?,?,?,?,?)}";
-                CallableStatement stm = cn.prepareCall(sql);
-                stm.setString(1, acc.getAccountNo());
-                stm.setString(2, acc.getPassword());
-                stm.setString(3, acc.getName());
-                stm.setDate(4, acc.getBirthday());
-                stm.setString(5, acc.getOrganization());
-                stm.setString(6, acc.getAddress());
-                stm.setString(7, acc.getEmail());
-                stm.setString(8, acc.getPhone());
-                stm.setInt(9, acc.getSalary());
-                stm.setDate(10, acc.getRegisterDate());
-                stm.setBoolean(11,false);
-                stm.execute();
+                if(cn!=null)
+                {
+                    String sql = "{call sp_Account_Insert(?,?,?,?,?,?,?,?,?,?,?)}";
+                    CallableStatement stm = cn.prepareCall(sql);
+                    stm.setString(1, acc.getAccountNo());
+                    stm.setString(2, acc.getPassword());
+                    stm.setString(3, acc.getName());
+                    stm.setDate(4, acc.getBirthday());
+                    stm.setString(5, acc.getOrganization());
+                    stm.setString(6, acc.getAddress());
+                    stm.setString(7, acc.getEmail());
+                    stm.setString(8, acc.getPhone());
+                    stm.setInt(9, acc.getSalary());
+                    stm.setDate(10, acc.getRegisterDate());
+                    stm.setBoolean(11,false);
+                    stm.execute();
+                    return true;
+                }
+                return false;
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null,"Has error in process update.Can not Update!");      
+                JOptionPane.showMessageDialog(null,"Has error in process update.Can not Update!");     
+                return false;
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Account is existed!");
-        }
     }
 
     @Override
@@ -191,8 +192,7 @@ public class AccountManagerImpl implements AccountManager {
     }
 
     @Override
-    public void updateRow(Account acc) {
-        if (this.isExisted(acc.getAccountNo(),acc.getPassword())) {
+    public boolean updateRow(Account acc) {
             try {
                 msssqlConnection.registerDriver();
                 Connection cn = msssqlConnection.createConnection();
@@ -212,14 +212,13 @@ public class AccountManagerImpl implements AccountManager {
                     stm.setDate(10, acc.getRegisterDate());
                     stm.setBoolean(11, acc.isStatus());
                     stm.execute();
+                    return true;
                 }
-               
+                return false;
             } catch (SQLException ex) {
                JOptionPane.showMessageDialog(null,"Can not update.Has error process update!");
+               return false;
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Account is not existed!");
-        }
     }
 
 }

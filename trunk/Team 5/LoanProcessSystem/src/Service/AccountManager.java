@@ -22,7 +22,7 @@ public interface AccountManager {
     /*
      *  Insert new Account to database
      */   
-    public void  insertRow(Account acc);   
+    public boolean insertRow(Account acc);   
     
     /*
      *  select a Account from database
@@ -44,7 +44,7 @@ public interface AccountManager {
     /*
      * update information for Account
      */  
-    public void updateRow(Account acc);
+    public boolean updateRow(Account acc);
     
     
 }

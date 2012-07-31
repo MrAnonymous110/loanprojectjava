@@ -19,12 +19,10 @@ import javax.swing.JOptionPane;
  * @author THU
  */
 public class ChangePassFrm extends javax.swing.JFrame {
-    Account acc;
     AccountDetailsFrm form;
     /** Creates new form ChangePassFrm */
-    public ChangePassFrm(Account acc,AccountDetailsFrm form) {
+    public ChangePassFrm(AccountDetailsFrm form) {
         initComponents();
-        this.acc = acc; 
         this.form = form;
     }
 
@@ -152,16 +150,22 @@ private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:e
     if(isValidate())
     {
        AccountManagerImpl accMng = new AccountManagerImpl();
-       acc.setPassword(new String(txtNewPass.getPassword()));
-       accMng.updateRow(acc);
-       JOptionPane.showMessageDialog(null,"Change password successful!");
-       form.setEnabled(true);
-       this.dispose();
+       form.acc.setPassword(new String(txtNewPass.getPassword()));
+       JOptionPane.showMessageDialog(null,form.acc.getAccountNo());
+       boolean isOK= accMng.updateRow(form.acc);
+       if(isOK){ 
+             JOptionPane.showMessageDialog(null,"Change password successful!");
+             form.setEnabled(true);
+             this.dispose();
+       }
+       else{
+             JOptionPane.showMessageDialog(null,"Change password fails!");
+       }
     }
 }//GEN-LAST:event_btnOKActionPerformed
 
 public boolean isValidate(){
-       if(!acc.getPassword().equals(new String(txtOldPass.getPassword())))
+       if(!form.acc.getPassword().equals(new String(txtOldPass.getPassword())))
        {
            lbMessage.setText("Old Pass not true");
            return false;
