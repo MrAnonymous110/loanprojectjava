@@ -27,11 +27,9 @@ public class AccountDetailsFrm extends javax.swing.JFrame {
     Account acc;
 
     /** Creates new form AccountDetailsFrm */
-    public AccountDetailsFrm(Account acc) {
+    public AccountDetailsFrm() {
         initComponents();
-        this.acc = acc;
-        loadAccount();
-        loadBill();
+
     }
 
     public void loadAccount() {
@@ -113,6 +111,11 @@ public class AccountDetailsFrm extends javax.swing.JFrame {
         btnViewBill = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -433,12 +436,21 @@ public class AccountDetailsFrm extends javax.swing.JFrame {
 
 private void btnChangePassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangePassActionPerformed
 // TODO add your handling code here:
-    ChangePassFrm form = new ChangePassFrm(acc, this);
+    ChangePassFrm form = new ChangePassFrm(this);
     form.setVisible(true);
     form.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     form.setLocationRelativeTo(null);
     this.setEnabled(false);
 }//GEN-LAST:event_btnChangePassActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        // TODO add your handling code here:
+        if(acc!=null)
+        {
+                loadAccount();
+                loadBill();
+        }
+    }//GEN-LAST:event_formWindowActivated
 
     /**
      * @param args the command line arguments

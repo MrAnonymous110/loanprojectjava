@@ -15,7 +15,12 @@ import javax.swing.border.Border;
  */
 public class Home extends javax.swing.JFrame {
     Admin admin ;
-    AccountManagerFrm accManager;
+    AccountManagerFrm accManagerFrm;
+    BillManagerFrm billManagerFrm;
+    BranchesManagerFrm branchesManagerFrm;
+    
+    
+    
     Color defaultcolor;
     Color hovercolor;
     
@@ -28,8 +33,9 @@ public class Home extends javax.swing.JFrame {
         initComponents();    
         defaultcolor= new Color(3,83,172);
         hovercolor= new Color(92,207,241);
-        accManager = new AccountManagerFrm();
-//        branchesManager = new BranchesManager();
+        accManagerFrm = new AccountManagerFrm();
+        billManagerFrm = new BillManagerFrm();   
+        branchesManagerFrm = new BranchesManagerFrm();
 //        fineManager = new FineManager();
     }
     
@@ -345,6 +351,9 @@ public class Home extends javax.swing.JFrame {
         pnBills.setBackground(new java.awt.Color(3, 83, 172));
         pnBills.setPreferredSize(new java.awt.Dimension(204, 217));
         pnBills.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnBillsMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 pnBillsMouseEntered(evt);
             }
@@ -588,8 +597,9 @@ public class Home extends javax.swing.JFrame {
 
     private void pnBranchesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnBranchesMouseClicked
         // TODO add your handling code here:
-//        branchesManager.setVisible(true);
-//        branchesManager.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+       branchesManagerFrm.setVisible(true);
+       branchesManagerFrm.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+       branchesManagerFrm.setLocationRelativeTo(null);
     }//GEN-LAST:event_pnBranchesMouseClicked
 
     private void pnFinesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnFinesMouseClicked
@@ -600,10 +610,17 @@ public class Home extends javax.swing.JFrame {
 
     private void pnAccountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnAccountMouseClicked
         // TODO add your handling code here:
-        accManager.setVisible(true);
-        accManager.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        accManager.setLocationRelativeTo(null);
+        accManagerFrm.setVisible(true);
+        accManagerFrm.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        accManagerFrm.setLocationRelativeTo(null);
     }//GEN-LAST:event_pnAccountMouseClicked
+
+    private void pnBillsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnBillsMouseClicked
+        // TODO add your handling code here:
+        billManagerFrm.setVisible(true);
+        billManagerFrm.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        billManagerFrm.setLocationRelativeTo(null);
+    }//GEN-LAST:event_pnBillsMouseClicked
 
   
     // Variables declaration - do not modify//GEN-BEGIN:variables
