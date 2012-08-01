@@ -10,6 +10,8 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -116,6 +118,18 @@ public class LoanTypeImp implements LoanType {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
             return 0;
+        }
+    }
+    public static void main(String[] args) {
+        LoanTypeImp l = new LoanTypeImp();
+        ResultSet r;
+        try {
+            r = l.getAllLoanType();
+        while(r.next()){
+            System.out.println(r.getObject(1)+ "\t"+ r.getObject(2)+ "\t"+ r.getObject(3)+ "\t"+r.getObject(4));
+        }
+        } catch (SQLException ex) {
+            System.out.println(ex);
         }
     }
 }
