@@ -21,7 +21,7 @@ import javax.swing.table.TableModel;
  * @author THU
  */
 public class AccountDetailsFrm extends javax.swing.JFrame {
-
+    
     Account acc;
 
     /** Creates new form AccountDetailsFrm */

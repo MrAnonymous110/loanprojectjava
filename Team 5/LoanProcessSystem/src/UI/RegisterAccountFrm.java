@@ -5,18 +5,13 @@
 package UI;
 
 import Beans.Account;
+import Encrypt.MD5;
 import Service.Impl.AccountManagerImpl;
 import Service.Impl.ValidateImpl;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.swing.JOptionPane;
+
 
 /**
  *
@@ -315,7 +310,7 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
                 SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd");
                 Account acc= new Account();
                 acc.setAccountNo(txtAccountNo.getText());
-                acc.setPassword(new String(txtPassword.getPassword()));
+                acc.setPassword(MD5.encrypt(new String(txtPassword.getPassword())));
                 acc.setAddress(txtAddress.getText());
                 acc.setName(txtName.getText());
                 acc.setBirthday(new java.sql.Date(dateBirthDay.getDate().getTime()));              
@@ -359,9 +354,9 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
         java.sql.Date birthDay = new java.sql.Date(dateBirthDay.getDate().getTime());
         Calendar calendar= GregorianCalendar.getInstance();
         calendar.setTime(birthDay);
-        int  birthYear = calendar.get(calendar.YEAR);
+        int  birthYear = calendar.get(Calendar.YEAR);
         calendar.setTime(getCurentDate());
-        int curentYear= calendar.get(calendar.YEAR);
+        int curentYear= calendar.get(Calendar.YEAR);
         int old= curentYear - birthYear ;
         if(old<18){
             lbMessage.setText("your old is'nt enough 18!");

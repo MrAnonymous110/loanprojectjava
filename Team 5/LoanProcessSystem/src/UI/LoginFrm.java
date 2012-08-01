@@ -6,6 +6,7 @@ package UI;
 
 import Beans.Account;
 import Beans.Admin;
+import Encrypt.MD5;
 import Service.AccountManager;
 import Service.AdminManager;
 import Service.Impl.AccountManagerImpl;
@@ -200,7 +201,7 @@ public class LoginFrm extends javax.swing.JFrame {
         {
             if(chbLoginAdmin.isSelected()==true)
             {
-               if(adminMng.isExisted(txtUsername.getText().trim(),new String(txtPassword.getPassword())))
+               if(adminMng.isExisted(txtUsername.getText().trim(),MD5.encrypt(new String(txtPassword.getPassword()))))
                {
                   homeForm.admin= adminMng.selectRow(txtUsername.getText().trim());
                   homeForm.setVisible(true);         
@@ -213,7 +214,7 @@ public class LoginFrm extends javax.swing.JFrame {
             }
             else
             {     
-               if(accountMng.isExisted(txtUsername.getText().trim(),new String(txtPassword.getPassword())))
+               if(accountMng.isExisted(txtUsername.getText().trim(),MD5.encrypt(new String(txtPassword.getPassword()))))
                {
                   accForm.acc= accountMng.selectRow(txtUsername.getText().trim());
                   accForm.setVisible(true);  

@@ -19,6 +19,11 @@ public interface AdminManager {
     */   
     public boolean isExisted(String username, String password);    
    
+   /*
+    * check exist user name
+    */
+    public boolean isExisted(String username);   
+    
     /*
      *  Insert new Account to database
      */   

@@ -5,6 +5,7 @@
 package UI;
 
 import Beans.Admin;
+import Encrypt.MD5;
 import Service.Impl.AdminManagerImpl;
 import Service.Impl.ValidateImpl;
 import javax.swing.JOptionPane;
@@ -33,7 +34,7 @@ public class WelcomeAdminFrm extends javax.swing.JFrame {
         txtAddress.setText(admin.getAddress());
         txtEmail.setText(admin.getEmail());
         txtPhone.setText(admin.getPhone());
-        txtPassword.setText(admin.getPassword());
+        txtPassword.setText("");
         txtConfirmPassword.setText("");
         txtPassword.setEditable(false);
         txtConfirmPassword.setEditable(false);
@@ -372,7 +373,8 @@ public class WelcomeAdminFrm extends javax.swing.JFrame {
                 admin.setAddress(txtAddress.getText());
                 admin.setEmail(txtEmail.getText());
                 admin.setPhone(txtPhone.getText());
-                admin.setPassword(new String(txtPassword.getPassword()));
+                admin.setPassword(MD5.encrypt(new String(txtPassword.getPassword())));
+                JOptionPane.showMessageDialog(null,admin.getPassword()); 
                 AdminManagerImpl adminMng = new AdminManagerImpl();
                 boolean isOK = adminMng.updateRow(admin);
                 if (isOK) {    
@@ -383,20 +385,20 @@ public class WelcomeAdminFrm extends javax.swing.JFrame {
             } else {
 
                 AdminManagerImpl adminMng = new AdminManagerImpl();
-                if (!adminMng.isExisted(txtUsername.getText().trim(), new String(txtPassword.getPassword()))) {
+                if (!adminMng.isExisted(txtUsername.getText().trim())) {
                     Admin ad = new Admin();
                     ad.setUsername(txtUsername.getText());
-                    ad.setFullname(txtName.getName());
+                    ad.setFullname(txtName.getText());
                     ad.setAddress(txtAddress.getText());
                     ad.setEmail(txtEmail.getText());
                     ad.setPhone(txtPhone.getText());
-                    ad.setPassword(new String(txtPassword.getPassword()));
-                    boolean isOK = adminMng.updateRow(ad);
-                    if (isOK) {
-                        JOptionPane.showMessageDialog(null,"Create successful!");
-                    } else {
-                        JOptionPane.showMessageDialog(null,"Create fails!");
-                    }
+                    ad.setPassword(MD5.encrypt(new String(txtPassword.getPassword())));
+                    JOptionPane.showMessageDialog(null," ");   
+                    boolean isOK=  adminMng.insertRow(ad);
+                    if(isOK)
+                        JOptionPane.showMessageDialog(null,"Create successful!");   
+                    else
+                        JOptionPane.showMessageDialog(null,"Create fails!");  
                 }
                 else
                 {
@@ -435,6 +437,8 @@ public class WelcomeAdminFrm extends javax.swing.JFrame {
         return true;
 
     }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
     private javax.swing.JButton btnEdit;
