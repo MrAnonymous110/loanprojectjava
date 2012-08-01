@@ -24,7 +24,7 @@ public interface LoanDetail {
 
     public boolean DelLoanDetail(int ID) throws SQLException;
 
-    public boolean InsertLoanDetail(int LoanID,String AccountNo,float LoanMoney,float Current,int TypeID,Date BeginTime,Date EndTime,int BranchID,Boolean Status) throws SQLException;
+    public boolean InsertLoanDetail(String AccountNo, float LoanMoney, float Current, int TypeID, Date BeginTime, Date EndTime, int BranchID) throws SQLException;
 
     public boolean changeLoanDetail(int LoanID,String AccountNo,float LoanMoney,float Current,int TypeID,Date BeginTime,Date EndTime,int BranchID,Boolean Status) throws SQLException;
 }

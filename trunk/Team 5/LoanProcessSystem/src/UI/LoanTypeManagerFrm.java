@@ -1,5 +1,6 @@
+package UI;
 
-import Beans.LoanType;
+
 import Service.Impl.LoanTypeImp;
 import com.sun.corba.se.impl.io.TypeMismatchException;
 import java.awt.BorderLayout;
@@ -11,29 +12,19 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.tree.DefaultTreeCellEditor;
 
-public class LoanTypeManager extends JFrame {
+public class LoanTypeManagerFrm extends JFrame {
 
     private DefaultTableModel model;
     private JTable table;
     private LoanTypeImp LT;
     private ResultSet rs;
-
-    public LoanTypeManager() {
+    
+    public LoanTypeManagerFrm() {
         super();
         loadData();
-        initComponent();
-    }
-
-    public LoanTypeManager(int ID) {
-        super();
-        loadData(ID);
         initComponent();
     }
 
@@ -98,8 +89,8 @@ public class LoanTypeManager extends JFrame {
 
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(w * 3 / 4 - 200, h / 3 + 300);
-        setLocation((w - w * 3 / 4 -200) / 2, (h - h / 3) / 2 -150);
+        setSize(w * 3 / 4, h / 3);
+        setLocation((w - w * 3 / 4) / 2, (h - h / 3) / 2);
         setTitle("Loan Types");
         setVisible(true);
         setResizable(true);
@@ -172,7 +163,7 @@ public class LoanTypeManager extends JFrame {
         inputPan.add(Box.createHorizontalStrut(15));
         inputPan.add(new JLabel("Description:"));
         inputPan.add(txtDescription);
-        int result = JOptionPane.showConfirmDialog(null, inputPan, "enter new Loan Type", JOptionPane.OK_CANCEL_OPTION);
+        int result = JOptionPane.showConfirmDialog(null, inputPan, "enter new Laon Type", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
             try {
                 float rate = Float.valueOf(txtInterestRate.getText());
@@ -215,40 +206,10 @@ public class LoanTypeManager extends JFrame {
             public boolean isCellEditable(int rowIndex, int colIndex) {
                 return false; //Disallow the editing of any cell
             }
-        };        table.removeColumn(table.getColumn("Description"));
-
-    }
-
-    private void loadData(int ID) throws HeadlessException {
-        try {
-            LT = new LoanTypeImp();
-            rs = LT.getLoanTypeByID(ID);
-            model = new DefaultTableModel();
-            ResultSetMetaData RSmetaData = rs.getMetaData();
-            int colNum = RSmetaData.getColumnCount();
-            for (int i = 2; i < colNum + 1; i++) {
-                String comName = RSmetaData.getColumnName(i);
-                model.addColumn(comName);
-            }
-            Object[] row = new Object[colNum];
-            while (rs.next()) {
-                for (int j = 2; j < colNum + 1; j++) {
-                    row[j - 2] = rs.getObject(j);
-                }
-                model.addRow(row);
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
-        }
-        table = new JTable(model) {
-
-            public boolean isCellEditable(int rowIndex, int colIndex) {
-                return false; //Disallow the editing of any cell
-            }
         };
     }
 
     public static void main(String args[]) {
-        LoanTypeManager loanTypeManager = new LoanTypeManager();
+        LoanTypeManagerFrm loanTypeManager = new LoanTypeManagerFrm();
     }
 }
