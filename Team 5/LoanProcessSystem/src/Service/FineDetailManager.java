@@ -34,4 +34,5 @@ public interface FineDetailManager {
     // Get Data From LoansDetails
     public Vector GetListLoanDetail(String sql);
     
+    public Vector GetDataFromColumn(String ColName);
 }

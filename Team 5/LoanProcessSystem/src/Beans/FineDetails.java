@@ -16,7 +16,7 @@ public class FineDetails {
     private int id;
     private int typeCode;
     private String accountNo;
-    private double money;
+    private float money;
     private String description;
     private Date datetime;
 
@@ -55,11 +55,11 @@ public class FineDetails {
         this.id = id;
     }
 
-    public double getMoney() {
+    public Float getMoney() {
         return money;
     }
 
-    public void setMoney(double money) {
+    public void setMoney(Float money) {
         this.money = money;
     }
 

@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import sun.io.Converters;
 
 /**
  *
@@ -27,9 +28,11 @@ public class FineDetailManagerImpl implements FineDetailManager {
 
     MSSQLDbConnection msssqlConnection;
     InstallmentMonthlyManagerImpl InsMonthlyImpl;
+    FineDetails fine;
 
     public FineDetailManagerImpl() {
         msssqlConnection = new MSSQLDbConnection();
+        fine = new FineDetails();
     }
 
     @Override
@@ -37,13 +40,23 @@ public class FineDetailManagerImpl implements FineDetailManager {
         try {
             msssqlConnection.registerDriver();
             Connection cn = msssqlConnection.createConnection();
-            String sql = "call sp_FineDetails_Insert(?,?,?,?,?)";
+            //String sql = "call sp_FineDetails_Insert(?,?,?,?,?)";
+            String sql = "Insert into [FineDetails] ([AccountNo],[TypeID],[Money],[Description],[Datetime]) Values(?,?,?,?,?)";
             CallableStatement cs = cn.prepareCall(sql);
+            String datetime = GetDateTimeNow();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date dateUtil = null;
+            try {
+                dateUtil = format.parse(datetime);
+            } catch (ParseException ex) {
+                Logger.getLogger(FineDetailManagerImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            java.sql.Date dateSql = new Date(dateUtil.getTime());
             cs.setString(1, fine.getAccountNo());
             cs.setInt(2, fine.getTypeCode());
-            cs.setDouble(3, fine.getMoney());
+            cs.setFloat(3, fine.getMoney());
             cs.setString(4, fine.getDescription());
-            cs.setDate(5, fine.getDatetime());
+            cs.setDate(5, dateSql);
             int count = cs.executeUpdate();
             cs.close();
             cn.close();
@@ -165,47 +178,57 @@ public class FineDetailManagerImpl implements FineDetailManager {
     @Override
     public void CalFine() {
         InsMonthlyImpl = new InstallmentMonthlyManagerImpl();
-        int[] datetimeCurrent = GetDateFromString(GetDateTimeNow());
-        String sql = "Select * from [InstallmentMonthly] Where [State]='" + 0 + "'";
-        Vector InstallmentMonthly = InsMonthlyImpl.GetListFromTable(sql);
-        Double FineRate = null;
-        String PayDate;
-        int TypeCode = 0;
-        String Account;
-        for (int i = 0; i < InstallmentMonthly.size(); i++) {
-            PayDate = ((Vector) InstallmentMonthly.elementAt(i)).elementAt(4).toString();
-            Account = ((Vector) InstallmentMonthly.elementAt(i)).elementAt(1).toString();
-            int[] PayDateArr = new int[3];
-            JOptionPane.showMessageDialog(null, PayDate);
-            PayDateArr = GetDateFromString(PayDate);
-            if (PayDateArr[2] == datetimeCurrent[2]) {
-                if (PayDateArr[1] == datetimeCurrent[1]) {
-                    if (datetimeCurrent[0] > PayDateArr[0]) {
-                        Float total = Float.parseFloat(((Vector) InstallmentMonthly.elementAt(i)).elementAt(3).toString());
-                        if (total > 1 && total < 5000) {
-                            FineRate = 0.02;
-                            TypeCode = 2;
+        Vector CustomerID = GetDataFromColumn("AccountNo");
+        for (int j = 0; j < CustomerID.size(); j++) {
+            int[] datetimeCurrent = GetDateFromString(GetDateTimeNow());
+            String sql = "Select TOP 1 * from [InstallmentMonthly] Where [State]=0 And [CustomerID] ='" + CustomerID.get(j).toString().trim() + "'";
+            Vector InstallmentMonthly = InsMonthlyImpl.GetListFromTable(sql);
+            Float FineRate = null;
+            String PayDate;
+            int TypeCode = 0;
+            String Account;
+            for (int i = 0; i < InstallmentMonthly.size(); i++) {
+                PayDate = ((Vector) InstallmentMonthly.elementAt(i)).elementAt(4).toString();
+                Account = ((Vector) InstallmentMonthly.elementAt(i)).elementAt(0).toString();
+                int[] PayDateArr = new int[3];
+                PayDateArr = GetDateFromString(PayDate);
+                //JOptionPane.showMessageDialog(null, PayDate +" "+ Account);
+                if (PayDateArr[2] == datetimeCurrent[2]) {
+                    //JOptionPane.showMessageDialog(null, PayDateArr[2]);
+                    if (PayDateArr[1] == datetimeCurrent[1]) {
+                        //JOptionPane.showMessageDialog(null, PayDateArr[1] +" "+ datetimeCurrent[1]);
+                        if (datetimeCurrent[0] > PayDateArr[0]) {
+                            Float total = Float.parseFloat(((Vector) InstallmentMonthly.elementAt(i)).elementAt(3).toString());
+                            if (total > 1 && total < 5000) {
+                                FineRate = new Float(0.02);
+                                TypeCode = 2;
+                            }
+                            if (total > 5001 && total < 20000) {
+                                FineRate = new Float(0.05);
+                                TypeCode = 3;
+                            }
+                            if (total > 20001) {
+                                FineRate = new Float(0.08);
+                                TypeCode = 4;
+                            }
+                            JOptionPane.showMessageDialog(null, FineRate);
+                            fine.setAccountNo(Account);
+                            fine.setDatetime(Date.valueOf(GetDateTimeNow()));
+                            fine.setDescription("Fine in: " + PayDate);
+                            fine.setMoney(FineRate * total);
+                            fine.setTypeCode(TypeCode);
+                            boolean ok = Insert(fine);
+                            if (ok) {
+                                JOptionPane.showMessageDialog(null, "Generate Fine Sucessfuly.");
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Generate Fine Fail.");
+                            }
                         }
-                        if (total > 5001 && total < 20000) {
-                            FineRate = 0.05;
-                            TypeCode = 3;
-                        }
-                        if (total > 20001) {
-                            FineRate = 0.08;
-                            TypeCode = 4;
-                        }
-                        FineDetails fine = new FineDetails();
-                        fine.setAccountNo(Account);
-                        fine.setDatetime(Date.valueOf(GetDateTimeNow()));
-                        fine.setDescription("Fine in: " + PayDate);
-                        fine.setMoney(FineRate * total);
-                        fine.setTypeCode(TypeCode);
-                        Insert(fine);
-                        break;
                     }
                 }
             }
         }
+
     }
 
     @Override
@@ -258,4 +281,23 @@ public class FineDetailManagerImpl implements FineDetailManager {
         }
     }
 
+    @Override
+    public Vector GetDataFromColumn(String ColName) {
+        try {
+            msssqlConnection.registerDriver();
+            Connection cn = msssqlConnection.createConnection();
+            String sql = "Select [" + ColName + "] From [LoanDetails]";
+            PreparedStatement ps = cn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            Vector list = new Vector();
+            while (rs.next()) {
+                //Vector fineType = new Vector();
+                list.addElement(rs.getString(ColName));
+                //list.addElement(fineType);
+            }
+            return list;
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
 }
