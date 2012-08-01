@@ -56,7 +56,7 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
         txtAccountNo = new javax.swing.JTextField();
         txtPassword = new javax.swing.JPasswordField();
         lblUsername10 = new javax.swing.JLabel();
-        txtRePassword = new javax.swing.JPasswordField();
+        txtConfirmPassword = new javax.swing.JPasswordField();
         txtName = new javax.swing.JTextField();
         txtPhone = new javax.swing.JTextField();
         txtEmail = new javax.swing.JTextField();
@@ -113,7 +113,7 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
         lblUsername9.setToolTipText("");
 
         lblUsername10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblUsername10.setText("Re Password");
+        lblUsername10.setText("Comfirm Password");
 
         txtOrganization.setColumns(20);
         txtOrganization.setRows(5);
@@ -169,17 +169,17 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txtPassword)
-                                    .addComponent(txtRePassword)
+                                    .addComponent(txtConfirmPassword)
                                     .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(lblUsername2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblUsername4, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
                                     .addComponent(lblUsername5, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblUsername1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblUsername10, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtAccountNo, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
                                     .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(dateBirthDay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(dateBirthDay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(lblUsername10, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(43, 43, 43)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -242,7 +242,7 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(txtRePassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtConfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(lblUsername2))
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -301,7 +301,7 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
         txtName.setText("");
         txtEmail.setText("");
         txtPassword.setText("");
-        txtRePassword.setText("");
+        txtConfirmPassword.setText("");
         txtOrganization.setText("");
         txtPhone.setText("");
         txtSalary.setText("");    
@@ -331,7 +331,7 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
         else
         {
            txtPassword.setText("");
-           txtRePassword.setText("");
+           txtConfirmPassword.setText("");
         }
     }//GEN-LAST:event_btnRegisterActionPerformed
 
@@ -340,7 +340,7 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
        ValidateImpl valid= new ValidateImpl();
         
        if(txtAccountNo.getText().equals("") || txtPassword.getPassword().length==0
-          || txtRePassword.getPassword().length==0 || txtName.getText().equals("")
+          || txtConfirmPassword.getPassword().length==0 || txtName.getText().equals("")
           || txtAddress.getText().equals("") 
           || txtEmail.getText().equals("") || txtOrganization.getText().equals("")
           || txtPhone.getText().equals("") || txtSalary.getText().equals("")     
@@ -349,7 +349,7 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
           return false;
        }
        // check RePassword and Password must same
-       boolean isSame= new String(txtPassword.getPassword()).equals(new String(txtRePassword.getPassword()));
+       boolean isSame= new String(txtPassword.getPassword()).equals(new String(txtConfirmPassword.getPassword()));
        if(!isSame)
        {
           lbMessage.setText("Repassword is not valid ");
@@ -420,12 +420,12 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
     private javax.swing.JLabel lblUsername9;
     private javax.swing.JTextField txtAccountNo;
     private javax.swing.JTextArea txtAddress;
+    private javax.swing.JPasswordField txtConfirmPassword;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextArea txtOrganization;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtPhone;
-    private javax.swing.JPasswordField txtRePassword;
     private javax.swing.JTextField txtSalary;
     // End of variables declaration//GEN-END:variables
 }

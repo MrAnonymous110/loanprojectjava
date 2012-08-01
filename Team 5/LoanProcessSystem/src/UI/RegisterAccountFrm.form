@@ -55,17 +55,17 @@
                               <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="txtPassword" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="txtRePassword" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="txtConfirmPassword" alignment="0" max="32767" attributes="0"/>
                                       <Component id="txtName" alignment="1" max="32767" attributes="0"/>
                                       <Component id="lblUsername2" alignment="0" min="-2" pref="70" max="-2" attributes="0"/>
                                       <Component id="lblUsername4" alignment="0" min="-2" pref="70" max="-2" attributes="0"/>
                                       <Component id="txtEmail" alignment="0" pref="192" max="32767" attributes="0"/>
                                       <Component id="lblUsername5" min="-2" pref="70" max="-2" attributes="0"/>
                                       <Component id="lblUsername1" alignment="0" min="-2" pref="70" max="-2" attributes="0"/>
-                                      <Component id="lblUsername10" alignment="0" min="-2" pref="85" max="-2" attributes="0"/>
                                       <Component id="txtAccountNo" alignment="0" pref="192" max="32767" attributes="0"/>
                                       <Component id="btnRegister" alignment="0" min="-2" pref="104" max="-2" attributes="0"/>
                                       <Component id="dateBirthDay" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="lblUsername10" alignment="0" min="-2" pref="114" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
@@ -150,7 +150,7 @@
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="txtRePassword" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtConfirmPassword" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="lblUsername2" min="-2" max="-2" attributes="0"/>
                               </Group>
@@ -299,10 +299,10 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Re Password"/>
+            <Property name="text" type="java.lang.String" value="Comfirm Password"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JPasswordField" name="txtRePassword">
+        <Component class="javax.swing.JPasswordField" name="txtConfirmPassword">
         </Component>
         <Component class="javax.swing.JTextField" name="txtName">
         </Component>

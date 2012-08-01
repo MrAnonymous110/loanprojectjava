@@ -22,7 +22,7 @@ public interface AdminManager {
     /*
      *  Insert new Account to database
      */   
-    public void  insertRow(Admin user);   
+    public boolean  insertRow(Admin user);   
     
     /*
      *  select a Account from database
@@ -44,5 +44,5 @@ public interface AdminManager {
     /*
      * update information for Account
      */  
-    public void updateRow(Admin user);
+    public boolean updateRow(Admin user);
 }
