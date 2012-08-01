@@ -35,4 +35,6 @@ public interface FineDetailManager {
     public Vector GetListLoanDetail(String sql);
     
     public Vector GetDataFromColumn(String ColName);
+    
+    public Vector Search(String CustomerID, int TypeID);
 }

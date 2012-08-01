@@ -7,6 +7,7 @@ package UI;
 import Service.Impl.BranchesManagerImpl;
 import Service.Impl.FineDetailManagerImpl;
 import Service.Impl.FineTypeManagerImpl;
+import java.awt.event.KeyEvent;
 import java.util.Vector;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -24,16 +25,17 @@ public class FineManagerFrm extends javax.swing.JFrame {
     /**
      * Creates new form FineManagerFrm
      */
+    FineDetailManagerImpl fineDetailMngImpl;
+
     public FineManagerFrm() {
         initComponents();
         this.setTitle("Fine Managerment");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        FineDetailManagerImpl fineDetailMngImpl = new FineDetailManagerImpl();
+        fineDetailMngImpl = new FineDetailManagerImpl();
         fineDetailMngImpl.CalFine();
-        
+        Vector source = fineDetailMngImpl.GetListFromTable("Select * From [FineDetails]");
         SetDataSoureComboboxFineType();
-        SetDataSourceComboboxBranches();
-        setDataSourceTable();
+        setDataSourceTable(source);
     }
 
     public void SetDataSoureComboboxFineType() {
@@ -43,16 +45,8 @@ public class FineManagerFrm extends javax.swing.JFrame {
         cboSearchFineType.setModel(cboModel);
     }
 
-    private void SetDataSourceComboboxBranches() {
-        BranchesManagerImpl branMngImpl = new BranchesManagerImpl();
-        Vector source = branMngImpl.GetColumnFromTable("Name");
-        ComboBoxModel cboModel = new DefaultComboBoxModel(source);
-        cboSearchBranches.setModel(cboModel);
-    }
+    private void setDataSourceTable(Vector Data) {
 
-    private void setDataSourceTable() {
-        FineDetailManagerImpl fineDetailMngImpl = new FineDetailManagerImpl();
-        Vector source = fineDetailMngImpl.GetListFromTable("Select * From [FineDetails]");
 //        Vector source = FineDetails.getList("Select * From [FineDetails]");
         Vector column = new Vector();
         column.addElement("FineID");
@@ -61,7 +55,7 @@ public class FineManagerFrm extends javax.swing.JFrame {
         column.addElement("Money");
         column.addElement("Description");
         column.addElement("Datetime");
-        TableModel tblModel = new DefaultTableModel(source, column);
+        TableModel tblModel = new DefaultTableModel(Data, column);
         tblFine.setModel(tblModel);
     }
 
@@ -79,11 +73,9 @@ public class FineManagerFrm extends javax.swing.JFrame {
         tblFine = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         txfSearch = new javax.swing.JTextField();
-        jRadioButton2 = new javax.swing.JRadioButton();
         cboSearchFineType = new javax.swing.JComboBox();
         jLabel2 = new javax.swing.JLabel();
-        cboSearchBranches = new javax.swing.JComboBox();
-        jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -106,49 +98,85 @@ public class FineManagerFrm extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED), "Control"));
 
-        jRadioButton2.setText("Search by Customer ID");
+        txfSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txfSearchKeyPressed(evt);
+            }
+        });
+
+        cboSearchFineType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboSearchFineTypeActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Search by Fine Type:");
 
-        jLabel1.setText("Search by Branches:");
+        jLabel3.setText("Search By CustomerID");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cboSearchBranches, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(23, 23, 23)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(cboSearchFineType, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jRadioButton2)
-                .addGap(18, 18, 18)
+                .addGap(46, 46, 46)
+                .addComponent(jLabel3)
+                .addGap(39, 39, 39)
                 .addComponent(txfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 43, Short.MAX_VALUE))
+                .addContainerGap(306, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton2)
                     .addComponent(cboSearchFineType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cboSearchBranches, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
                     .addComponent(jLabel2)
-                    .addComponent(txfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(43, Short.MAX_VALUE))
+                    .addComponent(txfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_START);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txfSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txfSearchKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            Search();
+        }
+    }//GEN-LAST:event_txfSearchKeyPressed
+
+    private void cboSearchFineTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboSearchFineTypeActionPerformed
+        // TODO add your handling code here:
+        Search();
+    }//GEN-LAST:event_cboSearchFineTypeActionPerformed
+
+    private void Search() {
+        int indexSelected = cboSearchFineType.getSelectedIndex();
+        int TypeId = -1;
+        switch (indexSelected) {
+            case 0:
+                TypeId = 2;
+                break;
+            case 1:
+                TypeId = 3;
+                break;
+            case 2:
+                TypeId = 4;
+                break;
+            default:
+                break;
+        }
+        Vector searchData = fineDetailMngImpl.Search(txfSearch.getText(), TypeId);
+        setDataSourceTable(searchData);
+    }
 
     /**
      * @param args the command line arguments
@@ -192,13 +220,11 @@ public class FineManagerFrm extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox cboSearchBranches;
     private javax.swing.JComboBox cboSearchFineType;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblFine;
     private javax.swing.JTextField txfSearch;
