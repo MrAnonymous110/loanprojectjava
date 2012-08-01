@@ -78,7 +78,7 @@ public class LoanDetailImp implements LoanDetail {
         try {
             msssqlConnection.registerDriver();
             Connection cn = msssqlConnection.createConnection();
-            String sql = "{call sp_LoanDetails_Insert(?,?,?,?,?,?,?,?)}";
+            String sql = "{call sp_LoanDetails_Insert(?,?,?,?,?,?,?)}";
             CallableStatement calStat = cn.prepareCall(sql);
             calStat.setString(1, AccountNo);
             calStat.setFloat(2, LoanMoney);
@@ -87,9 +87,10 @@ public class LoanDetailImp implements LoanDetail {
             calStat.setDate(5, BeginTime);
             calStat.setDate(6, EndTime);
             calStat.setInt(7, BranchID);
+            calStat.execute();
             return true;
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
+            JOptionPane.showMessageDialog(null,"Error: "+ex.getMessage());
             return false;
         }
     }

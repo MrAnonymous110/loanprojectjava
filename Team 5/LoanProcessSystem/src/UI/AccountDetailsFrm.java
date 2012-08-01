@@ -42,6 +42,7 @@ public class AccountDetailsFrm extends javax.swing.JFrame {
     }
 
     public void loadLoans() {
+        
     }
 
     public void loadBill() {
