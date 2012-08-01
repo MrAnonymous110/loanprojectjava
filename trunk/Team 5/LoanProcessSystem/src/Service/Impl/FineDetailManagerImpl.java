@@ -300,4 +300,11 @@ public class FineDetailManagerImpl implements FineDetailManager {
             return null;
         }
     }
+
+    @Override
+    public Vector Search(String CustomerID, int TypeID) {
+        String sql = "Select * From [FineDetails] Where [AccountNo] LIKE '%"+CustomerID+"%' And [TypeID] = "+TypeID+"";
+        Vector ResultSearch = GetListFromTable(sql);
+        return ResultSearch;
+    }
 }

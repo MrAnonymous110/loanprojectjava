@@ -318,15 +318,13 @@ public class BranchesManagerFrm extends javax.swing.JFrame {
         // TODO add your handling code here:
         String search = txfSearch.getText();
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            {
-                if (rdSearchID.isSelected()) {
-                    Vector dataSearch = brancheImpl.Search(search, 0);
+            if (rdSearchID.isSelected()) {
+                Vector dataSearch = brancheImpl.Search(search, 0);
+                ShowDataIntoTable(dataSearch);
+            } else {
+                if (rdSearchName.isSelected()) {
+                    Vector dataSearch = brancheImpl.Search(search, 1);
                     ShowDataIntoTable(dataSearch);
-                } else {
-                    if (rdSearchName.isSelected()) {
-                        Vector dataSearch = brancheImpl.Search(search, 1);
-                        ShowDataIntoTable(dataSearch);
-                    }
                 }
             }
         }
@@ -375,8 +373,6 @@ public class BranchesManagerFrm extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnSubmitActionPerformed
-
- 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnNew;
     private javax.swing.JButton btnSubmit;

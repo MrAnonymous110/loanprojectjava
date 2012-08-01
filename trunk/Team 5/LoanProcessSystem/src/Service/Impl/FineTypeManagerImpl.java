@@ -65,9 +65,9 @@ public class FineTypeManagerImpl implements FineTypeManager {
             ResultSet rs = ps.executeQuery();
             Vector list = new Vector();
             while (rs.next()) {
-                Vector fineType = new Vector();
-                fineType.addElement(rs.getString(ColName));
-                list.addElement(fineType);
+                //Vector fineType = new Vector();
+                list.addElement(rs.getString(ColName));
+               ///list.addElement(fineType);
             }
             return list;
         } catch (SQLException ex) {
