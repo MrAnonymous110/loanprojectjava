@@ -66,8 +66,6 @@ public class FineTypeManagerImpl implements FineTypeManager {
             Vector list = new Vector();
             while (rs.next()) {
                 Vector fineType = new Vector();
-//                fineType.addElement(rs.getInt("TypeID"));
-//                fineType.addElement(rs.getInt("Fine"));
                 fineType.addElement(rs.getString(ColName));
                 list.addElement(fineType);
             }
