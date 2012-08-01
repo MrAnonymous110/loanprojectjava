@@ -7,6 +7,7 @@ package UI;
 import Beans.Admin;
 import java.awt.Color;
 import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
 import javax.swing.border.Border;
 
 /**
@@ -14,31 +15,26 @@ import javax.swing.border.Border;
  * @author Administrator
  */
 public class Home extends javax.swing.JFrame {
-    Admin admin ;
+
+    Admin admin;
     AccountManagerFrm accManagerFrm;
     BillManagerFrm billManagerFrm;
     BranchesManagerFrm branchesManagerFrm;
-    
-    
-    
+    FineManagerFrm fineManagerFrm;
+    WelcomeAdminFrm adminFrm;
     Color defaultcolor;
     Color hovercolor;
-    
+
     /**
      * Creates new form Home
      */
 //    BranchesManager branchesManager;
 //    FineManager fineManager;
     public Home() {
-        initComponents();    
-        defaultcolor= new Color(3,83,172);
-        hovercolor= new Color(92,207,241);
-        accManagerFrm = new AccountManagerFrm();
-        billManagerFrm = new BillManagerFrm();   
-        branchesManagerFrm = new BranchesManagerFrm();
-//        fineManager = new FineManager();
+        initComponents();
+        defaultcolor = new Color(3, 83, 172);
+        hovercolor = new Color(92, 207, 241);
     }
-    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -59,12 +55,6 @@ public class Home extends javax.swing.JFrame {
         pnFines = new javax.swing.JPanel();
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
-        pnExit = new javax.swing.JPanel();
-        lbExit = new javax.swing.JLabel();
-        jLabel24 = new javax.swing.JLabel();
-        pnHelp = new javax.swing.JPanel();
-        lbHelp = new javax.swing.JLabel();
-        jLabel26 = new javax.swing.JLabel();
         pnBills = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
@@ -133,6 +123,9 @@ public class Home extends javax.swing.JFrame {
         pnAdmin.setBackground(new java.awt.Color(3, 83, 172));
         pnAdmin.setPreferredSize(new java.awt.Dimension(204, 217));
         pnAdmin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnAdminMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 pnAdminMouseEntered(evt);
             }
@@ -262,92 +255,6 @@ public class Home extends javax.swing.JFrame {
                 .addGap(5, 5, 5))
         );
 
-        pnExit.setBackground(new java.awt.Color(3, 83, 172));
-        pnExit.setPreferredSize(new java.awt.Dimension(204, 217));
-        pnExit.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                pnExitMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                pnExitMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                pnExitMouseExited(evt);
-            }
-        });
-
-        lbExit.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbExit.setForeground(new java.awt.Color(255, 255, 255));
-        lbExit.setText("Exit");
-
-        jLabel24.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/exit-icon.jpg"))); // NOI18N
-
-        javax.swing.GroupLayout pnExitLayout = new javax.swing.GroupLayout(pnExit);
-        pnExit.setLayout(pnExitLayout);
-        pnExitLayout.setHorizontalGroup(
-            pnExitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnExitLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnExitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnExitLayout.createSequentialGroup()
-                        .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 195, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnExitLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(lbExit)
-                        .addGap(94, 94, 94))))
-        );
-        pnExitLayout.setVerticalGroup(
-            pnExitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnExitLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
-                .addComponent(lbExit, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
-        pnHelp.setBackground(new java.awt.Color(3, 83, 172));
-        pnHelp.setPreferredSize(new java.awt.Dimension(204, 217));
-        pnHelp.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                pnHelpMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                pnHelpMouseExited(evt);
-            }
-        });
-
-        lbHelp.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbHelp.setForeground(new java.awt.Color(255, 255, 255));
-        lbHelp.setText("Help");
-
-        jLabel26.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Help-icon.jpg"))); // NOI18N
-
-        javax.swing.GroupLayout pnHelpLayout = new javax.swing.GroupLayout(pnHelp);
-        pnHelp.setLayout(pnHelpLayout);
-        pnHelpLayout.setHorizontalGroup(
-            pnHelpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnHelpLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnHelpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnHelpLayout.createSequentialGroup()
-                        .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 195, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnHelpLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(lbHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(81, 81, 81))))
-        );
-        pnHelpLayout.setVerticalGroup(
-            pnHelpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnHelpLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5))
-        );
-
         pnBills.setBackground(new java.awt.Color(3, 83, 172));
         pnBills.setPreferredSize(new java.awt.Dimension(204, 217));
         pnBills.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -454,16 +361,12 @@ public class Home extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnFines, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(pnBranches, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(44, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addGap(37, 37, 37)
                     .addComponent(pnAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(733, Short.MAX_VALUE)))
+                    .addContainerGap(510, Short.MAX_VALUE)))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -473,13 +376,11 @@ public class Home extends javax.swing.JFrame {
                     .addComponent(pnAccount, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(pnHelp, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(pnBranches, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(pnLoans, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(pnFines, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(pnBills, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(29, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -508,8 +409,8 @@ public class Home extends javax.swing.JFrame {
 
     private void pnAdminMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnAdminMouseEntered
         // TODO add your handling code here:
-         pnAdmin.setBorder(BorderFactory.createEtchedBorder());
-         pnAdmin.setBackground(hovercolor);
+        pnAdmin.setBorder(BorderFactory.createEtchedBorder());
+        pnAdmin.setBackground(hovercolor);
     }//GEN-LAST:event_pnAdminMouseEntered
 
     private void pnAdminMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnAdminMouseExited
@@ -520,8 +421,8 @@ public class Home extends javax.swing.JFrame {
 
     private void pnBranchesMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnBranchesMouseEntered
         // TODO add your handling code here:
-         pnBranches.setBorder(BorderFactory.createEtchedBorder());
-         pnBranches.setBackground(hovercolor);
+        pnBranches.setBorder(BorderFactory.createEtchedBorder());
+        pnBranches.setBackground(hovercolor);
     }//GEN-LAST:event_pnBranchesMouseEntered
 
     private void pnBranchesMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnBranchesMouseExited
@@ -532,97 +433,99 @@ public class Home extends javax.swing.JFrame {
 
     private void pnFinesMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnFinesMouseEntered
         // TODO add your handling code here:
-         pnFines.setBorder(BorderFactory.createEtchedBorder());
-         pnFines.setBackground(hovercolor);
+        pnFines.setBorder(BorderFactory.createEtchedBorder());
+        pnFines.setBackground(hovercolor);
     }//GEN-LAST:event_pnFinesMouseEntered
 
     private void pnFinesMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnFinesMouseExited
         // TODO add your handling code here:
-         pnFines.setBorder(null);
-         pnFines.setBackground(defaultcolor);
+        pnFines.setBorder(null);
+        pnFines.setBackground(defaultcolor);
     }//GEN-LAST:event_pnFinesMouseExited
-
-    private void pnExitMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnExitMouseEntered
-        // TODO add your handling code here:
-         pnExit.setBorder(BorderFactory.createEtchedBorder());
-         pnExit.setBackground(hovercolor);
-    }//GEN-LAST:event_pnExitMouseEntered
-
-    private void pnExitMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnExitMouseExited
-        // TODO add your handling code here:
-         pnExit.setBorder(null);
-         pnExit.setBackground(defaultcolor);
-    }//GEN-LAST:event_pnExitMouseExited
-
-    private void pnHelpMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnHelpMouseEntered
-        // TODO add your handling code here:
-         pnHelp.setBorder(BorderFactory.createEtchedBorder());
-         pnHelp.setBackground(hovercolor);
-    }//GEN-LAST:event_pnHelpMouseEntered
-
-    private void pnHelpMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnHelpMouseExited
-        // TODO add your handling code here:
-         pnHelp.setBorder(null);
-         pnHelp.setBackground(defaultcolor);
-    }//GEN-LAST:event_pnHelpMouseExited
 
     private void pnBillsMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnBillsMouseEntered
         // TODO add your handling code here:
-         pnBills.setBorder(BorderFactory.createEtchedBorder());
-         pnBills.setBackground(hovercolor);
+        pnBills.setBorder(BorderFactory.createEtchedBorder());
+        pnBills.setBackground(hovercolor);
     }//GEN-LAST:event_pnBillsMouseEntered
 
     private void pnBillsMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnBillsMouseExited
         // TODO add your handling code here:
-         pnBills.setBorder(null);
-         pnBills.setBackground(defaultcolor);
+        pnBills.setBorder(null);
+        pnBills.setBackground(defaultcolor);
     }//GEN-LAST:event_pnBillsMouseExited
 
     private void pnAccountMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnAccountMouseEntered
         // TODO add your handling code here:
-         pnAccount.setBorder(BorderFactory.createEtchedBorder());
-         pnAccount.setBackground(hovercolor);
+        pnAccount.setBorder(BorderFactory.createEtchedBorder());
+        pnAccount.setBackground(hovercolor);
     }//GEN-LAST:event_pnAccountMouseEntered
 
     private void pnAccountMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnAccountMouseExited
         // TODO add your handling code here:
-         pnAccount.setBorder(null);
-         pnAccount.setBackground(defaultcolor);
+        pnAccount.setBorder(null);
+        pnAccount.setBackground(defaultcolor);
     }//GEN-LAST:event_pnAccountMouseExited
-
-    private void pnExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnExitMouseClicked
-        // TODO add your handling code here:
-        System.exit(0);
-    }//GEN-LAST:event_pnExitMouseClicked
 
     private void pnBranchesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnBranchesMouseClicked
         // TODO add your handling code here:
-       branchesManagerFrm.setVisible(true);
-       branchesManagerFrm.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-       branchesManagerFrm.setLocationRelativeTo(null);
+        if (branchesManagerFrm != null) {
+            branchesManagerFrm.setVisible(true);
+        } else {
+            branchesManagerFrm = new BranchesManagerFrm();
+            branchesManagerFrm.setVisible(true);
+            branchesManagerFrm.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            branchesManagerFrm.setLocationRelativeTo(null);
+        }
     }//GEN-LAST:event_pnBranchesMouseClicked
 
     private void pnFinesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnFinesMouseClicked
         // TODO add your handling code here:
-//        fineManager.setVisible(true);
-//        fineManager.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        if (fineManagerFrm != null) {
+            fineManagerFrm.setVisible(true);
+        } else {
+            fineManagerFrm = new FineManagerFrm();
+            fineManagerFrm.setVisible(true);
+            fineManagerFrm.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            fineManagerFrm.setLocationRelativeTo(null);
+        }
     }//GEN-LAST:event_pnFinesMouseClicked
 
     private void pnAccountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnAccountMouseClicked
         // TODO add your handling code here:
-        accManagerFrm.setVisible(true);
-        accManagerFrm.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        accManagerFrm.setLocationRelativeTo(null);
+        if (accManagerFrm != null) {
+            accManagerFrm.setVisible(true);
+        } else {
+            accManagerFrm = new AccountManagerFrm();
+            accManagerFrm.setVisible(true);
+            accManagerFrm.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            accManagerFrm.setLocationRelativeTo(null);
+        }
     }//GEN-LAST:event_pnAccountMouseClicked
 
     private void pnBillsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnBillsMouseClicked
         // TODO add your handling code here:
-        billManagerFrm.setVisible(true);
-        billManagerFrm.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        billManagerFrm.setLocationRelativeTo(null);
+        if (billManagerFrm != null) {
+            billManagerFrm.setVisible(true);
+        } else {
+            billManagerFrm = new BillManagerFrm();
+            billManagerFrm.setVisible(true);
+            billManagerFrm.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            billManagerFrm.setLocationRelativeTo(null);
+        }
     }//GEN-LAST:event_pnBillsMouseClicked
 
-  
+    private void pnAdminMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnAdminMouseClicked
+        // TODO add your handling code here:
+        if (adminFrm != null) {
+            adminFrm.setVisible(true);
+        } else {
+            adminFrm = new WelcomeAdminFrm(admin);
+            adminFrm.setVisible(true);
+            adminFrm.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            adminFrm.setLocationRelativeTo(null);
+        }
+    }//GEN-LAST:event_pnAdminMouseClicked
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -632,8 +535,6 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
@@ -641,15 +542,11 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JLabel lbExit;
-    private javax.swing.JLabel lbHelp;
     private javax.swing.JPanel pnAccount;
     private javax.swing.JPanel pnAdmin;
     private javax.swing.JPanel pnBills;
     private javax.swing.JPanel pnBranches;
-    private javax.swing.JPanel pnExit;
     private javax.swing.JPanel pnFines;
-    private javax.swing.JPanel pnHelp;
     private javax.swing.JPanel pnLoans;
     // End of variables declaration//GEN-END:variables
 }

@@ -49,7 +49,7 @@ public class AdminManagerImpl implements AdminManager{
     }
 
     @Override
-    public void insertRow(Admin user) {
+    public boolean insertRow(Admin user) {
         try {
             msssqlConnection.registerDriver();
             Connection cn= msssqlConnection.createConnection();
@@ -62,11 +62,10 @@ public class AdminManagerImpl implements AdminManager{
             stm.setString(4,user.getAddress());
             stm.setString(5,user.getEmail());
             stm.setString(6,user.getPhone());
-            boolean isOK= stm.execute();
-            if(isOK)
-                JOptionPane.showMessageDialog(null,"Register successful! Please login!");
+            stm.execute();
+            return true;
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null,"Register fail!");
+           return false;
         }
     }
 
@@ -114,8 +113,29 @@ public class AdminManagerImpl implements AdminManager{
     }
 
     @Override
-    public void updateRow(Admin user) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public boolean updateRow(Admin user) {
+        try {
+                msssqlConnection.registerDriver();
+                Connection cn = msssqlConnection.createConnection();
+                if(cn!= null)
+                {
+                    String sql = "{call sp_Admin_Update(?,?,?,?,?,?)}";
+                    CallableStatement stm = cn.prepareCall(sql);
+                    stm.setString(1, user.getUsername());
+                    stm.setString(2, user.getPassword());
+                    stm.setString(3, user.getFullname());
+                    stm.setString(4, user.getAddress());
+                    stm.setString(5, user.getEmail());
+                    stm.setString(6, user.getPhone());       
+                    stm.execute();
+                    return true;
+                }
+                return false;
+            } catch (SQLException ex) {
+               JOptionPane.showMessageDialog(null,"Can not update.Has error process update!");
+               return false;
+            }
+        
     }
     
 }

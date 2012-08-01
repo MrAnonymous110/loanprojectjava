@@ -38,7 +38,6 @@ public class AccountManagerImpl implements AccountManager {
             ResultSet rs = cs.executeQuery();
             return rs.next();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
             return false;
         }
     }
