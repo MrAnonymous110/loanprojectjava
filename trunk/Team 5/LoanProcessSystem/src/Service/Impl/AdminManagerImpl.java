@@ -47,23 +47,48 @@ public class AdminManagerImpl implements AdminManager{
             return false;
         }
     }
-
+  
+    @Override
+    public boolean isExisted(String username) {
+        try {
+            msssqlConnection.registerDriver();
+            Connection cn= msssqlConnection.createConnection();     
+            if(cn!=null)
+            {
+               String sql = "{call sp_Admin_SelectRow(?)}";
+               CallableStatement cs= cn.prepareCall(sql);
+               cs.setString(1,username);
+               ResultSet rs = cs.executeQuery();
+               return rs.next();
+           }
+           else{
+               return false;
+           }
+        } catch (SQLException ex) {
+            return false;
+        }
+    }
+    
     @Override
     public boolean insertRow(Admin user) {
         try {
             msssqlConnection.registerDriver();
             Connection cn= msssqlConnection.createConnection();
             
-            String sql="INSERT INTO Admin (Username,Password,Fullname) values (?,?,?)";
-            PreparedStatement stm = cn.prepareStatement(sql);
-            stm.setString(1,user.getUsername());
-            stm.setString(2, user.getPassword());
-            stm.setString(3,user.getFullname());
-            stm.setString(4,user.getAddress());
-            stm.setString(5,user.getEmail());
-            stm.setString(6,user.getPhone());
-            stm.execute();
-            return true;
+            if(cn!=null)
+            {
+                String sql = "{call sp_Admin_Insert(?,?,?,?,?,?)}";
+                CallableStatement cs= cn.prepareCall(sql); 
+                cs.setString(1,user.getUsername());
+                cs.setString(2,user.getPassword());
+                cs.setString(3,user.getFullname());
+                cs.setString(4,user.getAddress());
+                cs.setString(5,user.getEmail());
+                cs.setString(6,user.getPhone());
+                cs.execute();
+                return true;
+            }
+            return false;
         } catch (SQLException ex) {
            return false;
         }
