@@ -41,7 +41,7 @@ public class FineDetailManagerImpl implements FineDetailManager {
             msssqlConnection.registerDriver();
             Connection cn = msssqlConnection.createConnection();
             //String sql = "call sp_FineDetails_Insert(?,?,?,?,?)";
-            String sql = "Insert into [FineDetails] ([AccountNo],[TypeID],[Money],[Description],[Datetime]) Values(?,?,?,?,?)";
+            String sql = "Insert into [FineDetails] ([AccountNo],[TypeID],[Money],[Description],[Datetime],[State]) Values(?,?,?,?,?,?)";
             CallableStatement cs = cn.prepareCall(sql);
             String datetime = GetDateTimeNow();
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -57,6 +57,7 @@ public class FineDetailManagerImpl implements FineDetailManager {
             cs.setFloat(3, fine.getMoney());
             cs.setString(4, fine.getDescription());
             cs.setDate(5, dateSql);
+            cs.setInt(6, 0);
             int count = cs.executeUpdate();
             cs.close();
             cn.close();
@@ -86,6 +87,7 @@ public class FineDetailManagerImpl implements FineDetailManager {
                 fine.addElement(rs.getFloat("Money"));
                 fine.addElement(rs.getString("Description"));
                 fine.addElement(rs.getDate("Datetime"));
+                fine.addElement(rs.getInt("State"));
                 list.addElement(fine);
             }
             cn.close();
@@ -179,6 +181,7 @@ public class FineDetailManagerImpl implements FineDetailManager {
     public void CalFine() {
         InsMonthlyImpl = new InstallmentMonthlyManagerImpl();
         Vector CustomerID = GetDataFromColumn("AccountNo");
+        boolean ok = false;
         for (int j = 0; j < CustomerID.size(); j++) {
             int[] datetimeCurrent = GetDateFromString(GetDateTimeNow());
             String sql = "Select TOP 1 * from [InstallmentMonthly] Where [State]=0 And [CustomerID] ='" + CustomerID.get(j).toString().trim() + "'";
@@ -192,7 +195,7 @@ public class FineDetailManagerImpl implements FineDetailManager {
                 Account = ((Vector) InstallmentMonthly.elementAt(i)).elementAt(0).toString();
                 int[] PayDateArr = new int[3];
                 PayDateArr = GetDateFromString(PayDate);
-                //JOptionPane.showMessageDialog(null, PayDate +" "+ Account);
+//                JOptionPane.showMessageDialog(null, PayDate +" "+ Account);
                 if (PayDateArr[2] == datetimeCurrent[2]) {
                     //JOptionPane.showMessageDialog(null, PayDateArr[2]);
                     if (PayDateArr[1] == datetimeCurrent[1]) {
@@ -211,22 +214,21 @@ public class FineDetailManagerImpl implements FineDetailManager {
                                 FineRate = new Float(0.08);
                                 TypeCode = 4;
                             }
-                            JOptionPane.showMessageDialog(null, FineRate);
                             fine.setAccountNo(Account);
                             fine.setDatetime(Date.valueOf(GetDateTimeNow()));
                             fine.setDescription("Fine in: " + PayDate);
                             fine.setMoney(FineRate * total);
                             fine.setTypeCode(TypeCode);
-                            boolean ok = Insert(fine);
-                            if (ok) {
-                                JOptionPane.showMessageDialog(null, "Generate Fine Sucessfuly.");
-                            } else {
-                                JOptionPane.showMessageDialog(null, "Generate Fine Fail.");
-                            }
+                            ok = Insert(fine);
                         }
                     }
                 }
             }
+        }
+        if (ok) {
+            JOptionPane.showMessageDialog(null, "Generate Fine Sucessfuly.");
+        } else {
+            JOptionPane.showMessageDialog(null, "Generate Fine Fail.");
         }
 
     }
@@ -303,7 +305,7 @@ public class FineDetailManagerImpl implements FineDetailManager {
 
     @Override
     public Vector Search(String CustomerID, int TypeID) {
-        String sql = "Select * From [FineDetails] Where [AccountNo] LIKE '%"+CustomerID+"%' And [TypeID] = "+TypeID+"";
+        String sql = "Select * From [FineDetails] Where [AccountNo] LIKE '%" + CustomerID + "%' And [TypeID] = " + TypeID + "";
         Vector ResultSearch = GetListFromTable(sql);
         return ResultSearch;
     }

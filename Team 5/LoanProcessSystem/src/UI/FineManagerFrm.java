@@ -32,7 +32,6 @@ public class FineManagerFrm extends javax.swing.JFrame {
         this.setTitle("Fine Managerment");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         fineDetailMngImpl = new FineDetailManagerImpl();
-        fineDetailMngImpl.CalFine();
         Vector source = fineDetailMngImpl.GetListFromTable("Select * From [FineDetails]");
         SetDataSoureComboboxFineType();
         setDataSourceTable(source);
@@ -55,6 +54,7 @@ public class FineManagerFrm extends javax.swing.JFrame {
         column.addElement("Money");
         column.addElement("Description");
         column.addElement("Datetime");
+        column.addElement("State");
         TableModel tblModel = new DefaultTableModel(Data, column);
         tblFine.setModel(tblModel);
     }
@@ -76,6 +76,7 @@ public class FineManagerFrm extends javax.swing.JFrame {
         cboSearchFineType = new javax.swing.JComboBox();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        btnGenerate = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -114,6 +115,13 @@ public class FineManagerFrm extends javax.swing.JFrame {
 
         jLabel3.setText("Search By CustomerID");
 
+        btnGenerate.setText("Generate Fine Of Customer");
+        btnGenerate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerateActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -127,18 +135,21 @@ public class FineManagerFrm extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addGap(39, 39, 39)
                 .addComponent(txfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(306, Short.MAX_VALUE))
+                .addGap(31, 31, 31)
+                .addComponent(btnGenerate)
+                .addContainerGap(110, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
+                .addGap(33, 33, 33)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cboSearchFineType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(txfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addContainerGap(46, Short.MAX_VALUE))
+                    .addComponent(jLabel3)
+                    .addComponent(btnGenerate, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.PAGE_START);
@@ -157,6 +168,13 @@ public class FineManagerFrm extends javax.swing.JFrame {
         // TODO add your handling code here:
         Search();
     }//GEN-LAST:event_cboSearchFineTypeActionPerformed
+
+    private void btnGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateActionPerformed
+        // TODO add your handling code here:
+        fineDetailMngImpl.CalFine();
+        Vector source = fineDetailMngImpl.GetListFromTable("Select * From [FineDetails]");
+        setDataSourceTable(source);
+    }//GEN-LAST:event_btnGenerateActionPerformed
 
     private void Search() {
         int indexSelected = cboSearchFineType.getSelectedIndex();
@@ -220,6 +238,7 @@ public class FineManagerFrm extends javax.swing.JFrame {
 //        });
 //    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGenerate;
     private javax.swing.JComboBox cboSearchFineType;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
