@@ -11,6 +11,7 @@
 package UI;
 
 import Beans.Account;
+import Encrypt.MD5;
 import Service.Impl.AccountManagerImpl;
 import javax.swing.JOptionPane;
 
@@ -20,10 +21,12 @@ import javax.swing.JOptionPane;
  */
 public class ChangePassFrm extends javax.swing.JFrame {
     AccountDetailsFrm form;
+    AccountManagerImpl accMng;
     /** Creates new form ChangePassFrm */
     public ChangePassFrm(AccountDetailsFrm form) {
         initComponents();
         this.form = form;
+        accMng = new AccountManagerImpl();
     }
 
     /** This method is called from within the constructor to
@@ -47,15 +50,20 @@ public class ChangePassFrm extends javax.swing.JFrame {
         txtOldPass = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 24));
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(102, 102, 255));
         jLabel4.setText("Change Password");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setText("New Password");
 
-        txt.setFont(new java.awt.Font("Tahoma", 1, 12));
+        txt.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txt.setText("Comfirm Password");
 
         btnOK.setText("OK");
@@ -99,7 +107,7 @@ public class ChangePassFrm extends javax.swing.JFrame {
                             .addComponent(txtComfirmPass, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(33, 33, 33))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(90, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lbMessage)
                 .addGap(25, 25, 25)
                 .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -148,10 +156,8 @@ private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
 private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
 // TODO add your handling code here:
     if(isValidate())
-    {
-       AccountManagerImpl accMng = new AccountManagerImpl();
-       form.acc.setPassword(new String(txtNewPass.getPassword()));
-       JOptionPane.showMessageDialog(null,form.acc.getAccountNo());
+    {       
+       form.acc.setPassword(MD5.encrypt(new String(txtNewPass.getPassword())));
        boolean isOK= accMng.updateRow(form.acc);
        if(isOK){ 
              JOptionPane.showMessageDialog(null,"Change password successful!");
@@ -164,8 +170,13 @@ private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:e
     }
 }//GEN-LAST:event_btnOKActionPerformed
 
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        // TODO add your handling code here:
+        form.setEnabled(true);
+    }//GEN-LAST:event_formWindowClosed
+
 public boolean isValidate(){
-       if(!form.acc.getPassword().equals(new String(txtOldPass.getPassword())))
+       if(!accMng.isExisted(form.acc.getAccountNo(),MD5.encrypt(new String(txtOldPass.getPassword()))))
        {
            lbMessage.setText("Old Pass not true");
            return false;
