@@ -4,6 +4,10 @@
  */
 package DbConnection;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -24,13 +28,19 @@ public class MSSQLDbConnection  implements DbConnection{
     
     public MSSQLDbConnection()
     {
-        serverName = "localhost";
-        port= "1433";
-        dbName= "LoanProcess";
-        user="sa";
-        password="1234567";
+        try {
+            BufferedReader reader = null;
+            reader = new BufferedReader(new FileReader("connect.txt"));
+            serverName = reader.readLine();
+            port= reader.readLine();
+            dbName= reader.readLine();
+            user=reader.readLine();
+            password=reader.readLine();
+         }
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
-
     public MSSQLDbConnection(String serverName, String port, String dbName, String user, String password) {
         this.serverName = serverName;
         this.port = port;
@@ -62,6 +72,47 @@ public class MSSQLDbConnection  implements DbConnection{
         }
     }
 
+    public String getDbName() {
+        return dbName;
+    }
+
+    public void setDbName(String dbName) {
+        this.dbName = dbName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPort() {
+        return port;
+    }
+
+    public void setPort(String port) {
+        this.port = port;
+    }
+
+    public String getServerName() {
+        return serverName;
+    }
+
+    public void setServerName(String serverName) {
+        this.serverName = serverName;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
  
+    
     
 }
