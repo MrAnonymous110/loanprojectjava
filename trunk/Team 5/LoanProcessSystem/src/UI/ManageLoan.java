@@ -232,6 +232,7 @@ public class ManageLoan extends javax.swing.JFrame {
         int numBra = VecBra.size();
         for (int i = 0; i < numBra; i++) {
             Vector v = (Vector) VecBra.get(i);
+            
         }
         if (validateFeild()) {
             Vector vAcc = (Vector) VecAcc.get(indexAcc - 1);
