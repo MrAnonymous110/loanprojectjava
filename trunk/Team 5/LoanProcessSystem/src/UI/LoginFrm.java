@@ -11,6 +11,7 @@ import Service.AccountManager;
 import Service.AdminManager;
 import Service.Impl.AccountManagerImpl;
 import Service.Impl.AdminManagerImpl;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -216,6 +217,7 @@ public class LoginFrm extends javax.swing.JFrame {
             {     
                if(accountMng.isExisted(txtUsername.getText().trim(),MD5.encrypt(new String(txtPassword.getPassword()))))
                {
+                  JOptionPane.showMessageDialog(null,MD5.encrypt(new String(txtPassword.getPassword())));
                   accForm.acc= accountMng.selectRow(txtUsername.getText().trim());
                   accForm.setVisible(true);  
                   accForm.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
