@@ -115,7 +115,6 @@ public class AccountManagerFrm extends javax.swing.JFrame {
         btnSave = new javax.swing.JButton();
         lbMessage = new javax.swing.JLabel();
         btnNew = new javax.swing.JButton();
-        dateBirthDay = new com.toedter.calendar.JDateChooser();
         lblUsername9 = new javax.swing.JLabel();
         chkStatus = new javax.swing.JCheckBox();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -303,9 +302,6 @@ public class AccountManagerFrm extends javax.swing.JFrame {
             }
         });
 
-        dateBirthDay.setDate(new java.util.Date(1343873113000L));
-        dateBirthDay.setDateFormatString("dd-MM-yyyy");
-
         lblUsername9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblUsername9.setText("Status");
 
@@ -319,7 +315,6 @@ public class AccountManagerFrm extends javax.swing.JFrame {
                     .addComponent(txtName)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
                     .addComponent(jScrollPane3)
-                    .addComponent(dateBirthDay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(lblUsername5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(13, 13, 13)
@@ -376,9 +371,7 @@ public class AccountManagerFrm extends javax.swing.JFrame {
                 .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblUsername2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dateBirthDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
+                .addGap(33, 33, 33)
                 .addComponent(lblUsername3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -398,7 +391,7 @@ public class AccountManagerFrm extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblUsername7)
                     .addComponent(txtSalary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblUsername9, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(chkStatus, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -721,7 +714,6 @@ public class AccountManagerFrm extends javax.swing.JFrame {
     private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox cbStatus;
     private javax.swing.JCheckBox chkStatus;
-    private com.toedter.calendar.JDateChooser dateBirthDay;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
