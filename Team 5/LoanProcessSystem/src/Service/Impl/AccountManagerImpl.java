@@ -235,7 +235,7 @@ public class AccountManagerImpl implements AccountManager {
                 {    
                      int number= Integer.parseInt(m.group(2))+1;
                      int lenght = (number+"").length();
-                     accNo = "DCC";
+                     accNo = "ACC";
                      for(int i=0;i<7-lenght;i++)
                      {
                         accNo+="0";
