@@ -6,6 +6,7 @@ package UI;
 
 import Beans.Branches;
 import Service.Impl.BranchesManagerImpl;
+import Service.Impl.ValidateImpl;
 import java.awt.event.*;
 import java.util.Vector;
 import javax.swing.JFrame;
@@ -28,6 +29,7 @@ public class BranchesManagerFrm extends javax.swing.JFrame {
     JPopupMenu popMenu;
     JMenuItem menuItem;
     BranchesManagerImpl brancheImpl;
+    String Erorr = "";
 
     public BranchesManagerFrm() {
         initComponents();
@@ -259,6 +261,32 @@ public class BranchesManagerFrm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private boolean ValidateInput(String Name, String Address, String Phone, String Email) {
+        ValidateImpl validateImpl = new ValidateImpl();
+        if (Name.equals("")) {
+            Erorr = Erorr + "\nPlease Enter Name.!";
+            return false;
+        }
+        if (Address.equals("")) {
+            Erorr = Erorr + "\nPlease Enter Address.!";
+            return false;
+        }
+        if (Phone.equals("")) {
+            Erorr = Erorr + "\nPlease Enter Phone.!";
+            return false;
+        }
+//        if (Email.equals("")) {
+//            Erorr = Erorr + "\nPlease Enter Email.!";
+//            return false;
+//        }
+        if (validateImpl.isEmail(Email)) {
+            Erorr = Erorr + "\nPlease Enter True Format.!";
+            return false;
+        }
+        return true;
+
+    }
+
     private void setPopupMenu(final int RowIndex) {
         popMenu = new JPopupMenu();
         menuItem = new JMenuItem("Block");
@@ -340,6 +368,45 @@ public class BranchesManagerFrm extends javax.swing.JFrame {
         txfName.setText(null);
     }//GEN-LAST:event_btnNewActionPerformed
 
+    public static void main(String args[]) {
+        /*
+         * Set the Nimbus look and feel
+         */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /*
+         * If Nimbus (introduced in Java SE 6) is not available, stay with the
+         * default look and feel. For details see
+         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(FineManagerFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(FineManagerFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(FineManagerFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(FineManagerFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /*
+         * Create and display the form
+         */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+
+            public void run() {
+                new BranchesManagerFrm().setVisible(true);
+            }
+        });
+    }
+
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
         // TODO add your handling code here:
         String Code = txfID.getText();
@@ -353,25 +420,30 @@ public class BranchesManagerFrm extends javax.swing.JFrame {
         branches.setName(Name);
         branches.setPhone(Phone);
         branches.setBranchesID(Code);
-        if (flag == 1) {
-            boolean ok = brancheImpl.Insert(branches);
-            if (ok) {
-                Vector data = brancheImpl.GetListFromTable("Select * From [Branches]");
-                ShowDataIntoTable(data);
-            } else {
-                JOptionPane.showConfirmDialog(null, "Fail");
-            }
-        } else {
-            if (flag == 0) {
-                boolean ok = brancheImpl.UpdateTable(branches);
+        if (ValidateInput(Name, Address, Phone, Email)) {
+            if (flag == 1) {
+                boolean ok = brancheImpl.Insert(branches);
                 if (ok) {
                     Vector data = brancheImpl.GetListFromTable("Select * From [Branches]");
                     ShowDataIntoTable(data);
                 } else {
                     JOptionPane.showConfirmDialog(null, "Fail");
                 }
+            } else {
+                if (flag == 0) {
+                    boolean ok = brancheImpl.UpdateTable(branches);
+                    if (ok) {
+                        Vector data = brancheImpl.GetListFromTable("Select * From [Branches]");
+                        ShowDataIntoTable(data);
+                    } else {
+                        JOptionPane.showConfirmDialog(null, "Fail");
+                    }
+                }
             }
+        } else {
+            JOptionPane.showMessageDialog(this, Erorr);
         }
+
     }//GEN-LAST:event_btnSubmitActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnNew;
