@@ -57,7 +57,7 @@ public class FineDetailManagerImpl implements FineDetailManager {
             cs.setFloat(3, fine.getMoney());
             cs.setString(4, fine.getDescription());
             cs.setDate(5, dateSql);
-            cs.setInt(6, 0);
+            cs.setInt(6, fine.getState());
             int count = cs.executeUpdate();
             cs.close();
             cn.close();
@@ -181,6 +181,7 @@ public class FineDetailManagerImpl implements FineDetailManager {
     public void CalFine() {
         InsMonthlyImpl = new InstallmentMonthlyManagerImpl();
         Vector CustomerID = GetDataFromColumn("AccountNo");
+        System.out.println(CustomerID.isEmpty());
         boolean ok = false;
         for (int j = 0; j < CustomerID.size(); j++) {
             int[] datetimeCurrent = GetDateFromString(GetDateTimeNow());
@@ -202,15 +203,15 @@ public class FineDetailManagerImpl implements FineDetailManager {
                         //JOptionPane.showMessageDialog(null, PayDateArr[1] +" "+ datetimeCurrent[1]);
                         if (datetimeCurrent[0] > PayDateArr[0]) {
                             Float total = Float.parseFloat(((Vector) InstallmentMonthly.elementAt(i)).elementAt(3).toString());
-                            if (total > 1 && total < 5000) {
+                            if (total >= 1 && total <= 5000) {
                                 FineRate = new Float(0.02);
                                 TypeCode = 2;
                             }
-                            if (total > 5001 && total < 20000) {
+                            if (total >= 5001 && total <= 20000) {
                                 FineRate = new Float(0.05);
                                 TypeCode = 3;
                             }
-                            if (total > 20001) {
+                            if (total >= 20001) {
                                 FineRate = new Float(0.08);
                                 TypeCode = 4;
                             }
@@ -219,6 +220,7 @@ public class FineDetailManagerImpl implements FineDetailManager {
                             fine.setDescription("Fine in: " + PayDate);
                             fine.setMoney(FineRate * total);
                             fine.setTypeCode(TypeCode);
+                            fine.setState(0);
                             ok = Insert(fine);
                         }
                     }
