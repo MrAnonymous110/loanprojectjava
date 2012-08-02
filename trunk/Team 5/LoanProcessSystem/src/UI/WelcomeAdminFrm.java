@@ -6,6 +6,7 @@ package UI;
 
 import Beans.Admin;
 import Encrypt.MD5;
+import Encrypt.StringMng;
 import Service.Impl.AdminManagerImpl;
 import Service.Impl.ValidateImpl;
 import javax.swing.JOptionPane;
@@ -388,7 +389,7 @@ public class WelcomeAdminFrm extends javax.swing.JFrame {
                 if (!adminMng.isExisted(txtUsername.getText().trim())) {
                     Admin ad = new Admin();
                     ad.setUsername(txtUsername.getText());
-                    ad.setFullname(txtName.getText());
+                    ad.setFullname(StringMng.getName(txtName.getText()));
                     ad.setAddress(txtAddress.getText());
                     ad.setEmail(txtEmail.getText());
                     ad.setPhone(txtPhone.getText());
