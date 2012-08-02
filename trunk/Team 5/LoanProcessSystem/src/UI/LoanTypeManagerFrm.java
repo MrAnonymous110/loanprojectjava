@@ -1,6 +1,5 @@
 package UI;
 
-
 import Service.Impl.LoanTypeImp;
 import com.sun.corba.se.impl.io.TypeMismatchException;
 import java.awt.BorderLayout;
@@ -9,19 +8,21 @@ import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class LoanTypeManagerFrm extends JFrame {
 
-    private DefaultTableModel model;
     private JTable table;
     private LoanTypeImp LT;
     private ResultSet rs;
-    
+
     public LoanTypeManagerFrm() {
         super();
         loadData();
@@ -63,90 +64,86 @@ public class LoanTypeManagerFrm extends JFrame {
             }
         });
 
-        JButton btnShowLoanDetailByLoanType = new JButton("show all Loan details of this type");
-        btnShowLoanDetailByLoanType.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-            }
-        });
-
         JPanel inputPanel = new JPanel();
         inputPanel.add(addButton);
         inputPanel.add(removeButton);
         inputPanel.add(updateButton);
-        inputPanel.add(btnShowLoanDetailByLoanType);
         inputPanel.add(btnCancel);
-//        JTextField txtLoanType = new JTextField("", 20);
 
-//        JPanel searchPanel = new JPanel();
-//        searchPanel.add(txtLoanType);
-
+        JScrollPane jsTable = new JScrollPane(table);
         Container container = getContentPane();
-        container.add(new JScrollPane(table), BorderLayout.CENTER);
+        container.add(jsTable, BorderLayout.CENTER);
         container.add(inputPanel, BorderLayout.SOUTH);
-//        container.add(searchPanel, BorderLayout.NORTH);
+        table.setAutoCreateRowSorter(false);
 
 
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(w * 3 / 4, h / 3);
-        setLocation((w - w * 3 / 4) / 2, (h - h / 3) / 2);
+
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setSize(w * 3 / 4, h * 4 / 5);
+        setLocation((w - w * 3 / 4) / 2, (h - h * 4 / 5) / 2);
         setTitle("Loan Types");
         setVisible(true);
         setResizable(true);
     }
 
     private void btnDeleteLoan_actionPerform() throws HeadlessException {
-        try {
-            int i = table.getSelectedRow();
-            int confirm = JOptionPane.showConfirmDialog(null, "confirm delete?", "delete", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
-                rs.absolute(i + 1);
-                if (LT.DelLoanType(rs.getInt("TypeID"))) {
-                    JOptionPane.showMessageDialog(null, "delete done");
+        int i = table.getSelectedRow();
+        if (i >= 0) {
+            try {
+                int confirm = JOptionPane.showConfirmDialog(null, "confirm delete?", "delete", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    rs.absolute(i + 1);
+                    if (LT.DelLoanType(rs.getInt("TypeID"))) {
+                        JOptionPane.showMessageDialog(null, "delete done");
+                    }
                 }
-                model.removeRow(i);
+                new LoanTypeManagerFrm().setVisible(true);
+                dispose();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex);
             }
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
+        } else {
+            JOptionPane.showMessageDialog(null, "Please choose one row.");
         }
-        loadData();
+
     }
 
     private void btnUpdateLoanType_Actionperform() throws HeadlessException, NumberFormatException {
         int i = table.getSelectedRow();
         int ID;
-        try {
-            rs.absolute(i + 1);
-            ID = rs.getInt("TypeID");
-            JTextField txtTypeName = new JTextField(10);
-            txtTypeName.setText(table.getValueAt(i, 0).toString());
-            JTextField txtInterestRate = new JTextField(4);
-            txtInterestRate.setText(table.getValueAt(i, 1).toString());
-            JTextField txtDescription = new JTextField(20);
-            txtDescription.setText(table.getValueAt(i, 2).toString());
+        if (i >= 0) {
+            try {
+                rs.absolute(i + 1);
+                ID = rs.getInt("TypeID");
+                JTextField txtTypeName = new JTextField(10);
+                txtTypeName.setText(table.getValueAt(i, 0).toString());
+                JTextField txtInterestRate = new JTextField(4);
+                txtInterestRate.setText(table.getValueAt(i, 1).toString());
+                JTextField txtDescription = new JTextField(20);
+                txtDescription.setText(table.getValueAt(i, 2).toString());
 
-            JPanel inputPan = new JPanel();
-            inputPan.add(new JLabel("Name Loan Type:"));
-            inputPan.add(txtTypeName);
-            inputPan.add(Box.createHorizontalStrut(15));
-            inputPan.add(new JLabel("Interest rate:"));
-            inputPan.add(txtInterestRate);
-            inputPan.add(Box.createHorizontalStrut(15));
-            inputPan.add(new JLabel("Description:"));
-            inputPan.add(txtDescription);
-            int result = JOptionPane.showConfirmDialog(null, inputPan, "input new value", JOptionPane.OK_CANCEL_OPTION);
-            if (result == JOptionPane.OK_OPTION) {
-                float rate = Float.valueOf(txtInterestRate.getText());
-                LT.changeLoanType(ID, txtTypeName.getText(), rate, txtDescription.getText());
-                JOptionPane.showMessageDialog(null, "update success");
-                String[] newType = {txtTypeName.getText(), txtInterestRate.getText(), txtDescription.getText()};
-                model.addRow(newType);
-                model.removeRow(i);
+                JPanel inputPan = new JPanel();
+                inputPan.add(new JLabel("Name Loan Type:"));
+                inputPan.add(txtTypeName);
+                inputPan.add(Box.createHorizontalStrut(15));
+                inputPan.add(new JLabel("Interest rate:"));
+                inputPan.add(txtInterestRate);
+                inputPan.add(Box.createHorizontalStrut(15));
+                inputPan.add(new JLabel("Description:"));
+                inputPan.add(txtDescription);
+                int result = JOptionPane.showConfirmDialog(null, inputPan, "input new value", JOptionPane.OK_CANCEL_OPTION);
+                if (result == JOptionPane.OK_OPTION) {
+                    float rate = Float.valueOf(txtInterestRate.getText());
+                    LT.changeLoanType(ID, txtTypeName.getText(), rate, txtDescription.getText());
+                    JOptionPane.showMessageDialog(null, "update success");
+                    new LoanTypeManagerFrm().setVisible(true);
+                    dispose();
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex);
             }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Database error :(");
+        } else {
+            JOptionPane.showMessageDialog(null, "Please choose one row.");
         }
     }
 
@@ -163,15 +160,15 @@ public class LoanTypeManagerFrm extends JFrame {
         inputPan.add(Box.createHorizontalStrut(15));
         inputPan.add(new JLabel("Description:"));
         inputPan.add(txtDescription);
-        int result = JOptionPane.showConfirmDialog(null, inputPan, "enter new Laon Type", JOptionPane.OK_CANCEL_OPTION);
+        int result = JOptionPane.showConfirmDialog(null, inputPan, "enter new Loan Type", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
             try {
                 float rate = Float.valueOf(txtInterestRate.getText());
                 LT.InsertLoanType(txtTypeName.getText(), rate, txtDescription.getText());
                 JOptionPane.showMessageDialog(null, "add success");
-                String[] newType = {txtTypeName.getText(), txtInterestRate.getText(), txtDescription.getText()};
-                model.addRow(newType);
-
+//                String[] newType = {txtTypeName.getText(), txtInterestRate.getText(), txtDescription.getText()};
+                new LoanTypeManagerFrm().setVisible(true);
+                dispose();
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "wrong type input");
             } catch (SQLException ex) {
@@ -181,10 +178,10 @@ public class LoanTypeManagerFrm extends JFrame {
     }
 
     private void loadData() throws HeadlessException {
+        LT = new LoanTypeImp();
         try {
-            LT = new LoanTypeImp();
             rs = LT.getAllLoanType();
-            model = new DefaultTableModel();
+            DefaultTableModel model = new DefaultTableModel();
             ResultSetMetaData RSmetaData = rs.getMetaData();
             int colNum = RSmetaData.getColumnCount();
             for (int i = 2; i < colNum + 1; i++) {
@@ -198,18 +195,29 @@ public class LoanTypeManagerFrm extends JFrame {
                 }
                 model.addRow(row);
             }
+            table = new JTable() {
+
+                @Override
+                public boolean isCellEditable(int i, int i1) {
+                    return false;
+                }
+            };
+            table.setModel(model);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }
-        table = new JTable(model) {
-
-            public boolean isCellEditable(int rowIndex, int colIndex) {
-                return false; //Disallow the editing of any cell
-            }
-        };
     }
 
     public static void main(String args[]) {
         LoanTypeManagerFrm loanTypeManager = new LoanTypeManagerFrm();
     }
 }
+//        addWindowListener(new java.awt.event.WindowAdapter() {
+//            public void windowClosed(java.awt.event.WindowEvent evt) {
+//                loadParrent(evt);
+//            }
+//
+//            private void loadParrent(WindowEvent evt) {
+//                new  LoanTypeManagerFrm().setVisible(true);
+//            }
+//        });

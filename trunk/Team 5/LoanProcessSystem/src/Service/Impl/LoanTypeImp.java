@@ -30,7 +30,7 @@ public class LoanTypeImp implements LoanType {
             msssqlConnection.registerDriver();
             Connection cn = msssqlConnection.createConnection();
             String sql = "{call sp_LoanType_SelectAll}";
-            CallableStatement calStat = cn.prepareCall(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            CallableStatement calStat = cn.prepareCall(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             return calStat.executeQuery();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
