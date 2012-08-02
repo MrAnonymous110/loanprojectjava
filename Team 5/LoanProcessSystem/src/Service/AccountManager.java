@@ -46,5 +46,9 @@ public interface AccountManager {
      */  
     public boolean updateRow(Account acc);
     
+    /*
+     * Auto generate AccountNo for Customer
+     */
+    public String generateAccountNo();
     
 }

@@ -348,16 +348,25 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Views List Loans"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnListLoansActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnListFines">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="View List Fines"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnListFinesActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnListBills">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="View List Bills"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnListBillsActionPerformed"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>

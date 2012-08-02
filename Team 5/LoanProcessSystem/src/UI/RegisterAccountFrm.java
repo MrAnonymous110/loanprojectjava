@@ -6,6 +6,7 @@ package UI;
 
 import Beans.Account;
 import Encrypt.MD5;
+import Encrypt.StringMng;
 import Service.Impl.AccountManagerImpl;
 import Service.Impl.ValidateImpl;
 import java.text.SimpleDateFormat;
@@ -25,6 +26,7 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
     public RegisterAccountFrm() {
         initComponents();
         accMng= new AccountManagerImpl();
+        txtAccountNo.setText(accMng.generateAccountNo());
     }
 
     /**
@@ -106,6 +108,8 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
         lblUsername9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblUsername9.setText("Phone");
         lblUsername9.setToolTipText("");
+
+        txtAccountNo.setEditable(false);
 
         lblUsername10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblUsername10.setText("Comfirm Password");
@@ -291,7 +295,6 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
         // TODO add your handling code here:
-        txtAccountNo.setText("");
         txtAddress.setText("");
         txtName.setText("");
         txtEmail.setText("");
@@ -312,13 +315,14 @@ public class RegisterAccountFrm extends javax.swing.JFrame {
                 acc.setAccountNo(txtAccountNo.getText());
                 acc.setPassword(MD5.encrypt(new String(txtPassword.getPassword())));
                 acc.setAddress(txtAddress.getText());
-                acc.setName(txtName.getText());
+                acc.setName(StringMng.getName(txtName.getText()));
                 acc.setBirthday(new java.sql.Date(dateBirthDay.getDate().getTime()));              
                 acc.setEmail(txtEmail.getText());
                 acc.setOrganization(txtOrganization.getText());
                 acc.setPhone(txtPhone.getText());
                 acc.setSalary(Integer.parseInt(txtSalary.getText()));
                 acc.setRegisterDate(getCurentDate());
+                acc.setStatus(false);
                 accMng.insertRow(acc);
                 btnResetActionPerformed(evt);
                 lbMessage.setText("Successful!");

@@ -5,6 +5,8 @@
 package UI;
 
 import Beans.Account;
+import Encrypt.MD5;
+import Encrypt.StringMng;
 import Service.Impl.AccountManagerImpl;
 import Service.Impl.ValidateImpl;
 import java.text.ParseException;
@@ -34,6 +36,7 @@ public class AccountManagerFrm extends javax.swing.JFrame {
     AccountManagerImpl accMng;
     Account accDefault;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    int flag;
     
     /**
      * Creates new form AccountManager
@@ -61,11 +64,13 @@ public class AccountManagerFrm extends javax.swing.JFrame {
     private void reloadData() {
         list = accMng.getAll();
         txtSearch.setText("");
+        lbMessage.setText("");
         TableModel model = new DefaultTableModel(list, column);
         tblAccountList.setModel(model);
         tblAccountList.removeColumn(tblAccountList.getColumn("Password"));
         resetTextForm();
         txtAccountNo.setEditable(false);
+        flag=0;
     }
 
     /**
@@ -148,6 +153,7 @@ public class AccountManagerFrm extends javax.swing.JFrame {
 
         btnDetails.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/address_16.png"))); // NOI18N
         btnDetails.setText("View Details");
+        btnDetails.setEnabled(false);
         btnDetails.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDetailsActionPerformed(evt);
@@ -297,6 +303,7 @@ public class AccountManagerFrm extends javax.swing.JFrame {
             }
         });
 
+        dateBirthDay.setDate(new java.util.Date(1343873113000L));
         dateBirthDay.setDateFormatString("dd-MM-yyyy");
 
         lblUsername9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -503,17 +510,23 @@ public class AccountManagerFrm extends javax.swing.JFrame {
 
     private void btnDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailsActionPerformed
         // TODO add your handling code here:
-        AccountDetailsFrm form = new AccountDetailsFrm();
-        form.setVisible(true);
-        form.setLocationRelativeTo(null);
-        form.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-         form.setLocationRelativeTo(null);
+       if(!txtAccountNo.getText().equals(""))
+       {
+            AccountDetailsFrm form = new AccountDetailsFrm();
+            form.acc = accMng.selectRow(txtAccountNo.getText().trim());
+            form.setVisible(true);
+            form.setLocationRelativeTo(null);
+            form.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+       }
+        
     }//GEN-LAST:event_btnDetailsActionPerformed
 
     private void btnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewActionPerformed
         // TODO add your handling code here:
-        txtAccountNo.setEditable(true);
         resetTextForm();
+        String txt=accMng.generateAccountNo();
+        txtAccountNo.setText(txt);
+        flag=1;
     }//GEN-LAST:event_btnNewActionPerformed
     /*
      * reset text for form information
@@ -532,17 +545,15 @@ public class AccountManagerFrm extends javax.swing.JFrame {
     private void save() {
         // insert or update
         if (isValidate()) {
-            if (txtAccountNo.isEditable()) {
+            if (flag==1) {
                 // insert new Account        
                setAccountDefault();
                accDefault.setRegisterDate(getCurentDate());
-               accMng.insertRow(accDefault);  
-               lbMessage.setText("Successful!");
+               accMng.insertRow(accDefault);                
             } else {
                // update
                setAccountDefault();
                accMng.updateRow(accDefault);
-               lbMessage.setText("Successful!");
             }
             reloadData();
         }
@@ -557,7 +568,7 @@ public class AccountManagerFrm extends javax.swing.JFrame {
                 Vector acc = (Vector) list.get(index);
                 // input value to the form
                 txtAccountNo.setText(acc.get(0).toString());
-                txtPassword.setText(acc.get(1).toString());
+                txtPassword.setText("");
                 txtName.setText(acc.get(2).toString());
                 dateBirthDay.setDate(dateFormat.parse(acc.get(3).toString()));
                 txtOrganization.setText(acc.get(4).toString());
@@ -566,7 +577,7 @@ public class AccountManagerFrm extends javax.swing.JFrame {
                 txtPhone.setText(acc.get(7).toString());
                 txtSalary.setText(acc.get(8).toString());
                 chkStatus.setSelected((boolean)acc.get(10));
-                
+                btnDetails.setEnabled(true);
                // set registerDate for accDefault  
                 accDefault.setRegisterDate(new java.sql.Date(dateFormat.parse(acc.get(9).toString()).getTime()));
             } catch (ParseException ex) {
@@ -577,9 +588,9 @@ public class AccountManagerFrm extends javax.swing.JFrame {
    // set value from form Information to object accDefault 
     private void setAccountDefault() {
             accDefault.setAccountNo(txtAccountNo.getText());
-            accDefault.setPassword(new String(txtPassword.getPassword()));
+            accDefault.setPassword(MD5.encrypt(new String(txtPassword.getPassword())));
             accDefault.setAddress(txtAddress.getText());
-            accDefault.setName(txtName.getText());
+            accDefault.setName(StringMng.getName(txtName.getText()));
             
             accDefault.setBirthday(new java.sql.Date(dateBirthDay.getDate().getTime()));
             accDefault.setEmail(txtEmail.getText());
