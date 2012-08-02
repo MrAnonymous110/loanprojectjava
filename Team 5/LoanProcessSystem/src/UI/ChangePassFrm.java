@@ -173,6 +173,7 @@ private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:e
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         // TODO add your handling code here:
         form.setEnabled(true);
+        form.setVisible(true);
     }//GEN-LAST:event_formWindowClosed
 
 public boolean isValidate(){

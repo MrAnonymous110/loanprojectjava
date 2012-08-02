@@ -12,21 +12,24 @@ package UI;
 
 import Beans.Account;
 import Service.Impl.BillManagerImpl;
+import Service.Impl.FineDetailManagerImpl;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import javax.xml.crypto.Data;
 
 /**
  *
  * @author THU
  */
 public class AccountDetailsFrm extends javax.swing.JFrame {
-    
+
     Account acc;
 
     /** Creates new form AccountDetailsFrm */
     public AccountDetailsFrm() {
         initComponents();
+
     }
 
     public void loadAccount() {
@@ -42,7 +45,6 @@ public class AccountDetailsFrm extends javax.swing.JFrame {
     }
 
     public void loadLoans() {
-        
     }
 
     public void loadBill() {
@@ -56,6 +58,21 @@ public class AccountDetailsFrm extends javax.swing.JFrame {
         column.addElement("Description");
         TableModel model = new DefaultTableModel(list, column);
         tblListBills.setModel(model);
+    }
+
+    public void loadFine() {
+        FineDetailManagerImpl fineDetaiMngmpl = new FineDetailManagerImpl();
+        Vector dataFine = fineDetaiMngmpl.GetListFromTable("Select * from [FineDetails]");
+        Vector column = new Vector();
+        column.addElement("FineID");
+        column.addElement("AccountNo");
+        column.addElement("TypeID");
+        column.addElement("Money");
+        column.addElement("Description");
+        column.addElement("Datetime");
+        column.addElement("State");
+        TableModel tblModel = new DefaultTableModel(dataFine, column);
+        tblListFines.setModel(tblModel);
     }
 
     @SuppressWarnings("unchecked")
@@ -117,7 +134,7 @@ public class AccountDetailsFrm extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 24));
         jLabel4.setForeground(new java.awt.Color(102, 102, 255));
         jLabel4.setText("Account Detail");
         jPanel1.add(jLabel4);
@@ -336,7 +353,7 @@ public class AccountDetailsFrm extends javax.swing.JFrame {
                         .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 662, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 488, Short.MAX_VALUE)
                         .addComponent(btnNewLoan)
                         .addGap(18, 18, 18)
                         .addComponent(btnViewLoan)
@@ -360,13 +377,13 @@ public class AccountDetailsFrm extends javax.swing.JFrame {
 
         tblListFines.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         jScrollPane3.setViewportView(tblListFines);
@@ -459,10 +476,10 @@ private void btnChangePassActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         // TODO add your handling code here:
-        if(acc!=null)
-        {
-                loadAccount();
-                loadBill();
+        if (acc != null) {
+            loadAccount();
+            loadBill();
+            loadFine();
         }
     }//GEN-LAST:event_formWindowActivated
 
@@ -473,14 +490,13 @@ private void btnChangePassActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 
     private void btnListFinesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListFinesActionPerformed
         // TODO add your handling code here:
-         jTabbedPane1.setSelectedIndex(2);
+        jTabbedPane1.setSelectedIndex(2);
     }//GEN-LAST:event_btnListFinesActionPerformed
 
     private void btnListBillsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListBillsActionPerformed
         // TODO add your handling code here:
-         jTabbedPane1.setSelectedIndex(3);
+        jTabbedPane1.setSelectedIndex(3);
     }//GEN-LAST:event_btnListBillsActionPerformed
-
 //    /**
 //     * @param args the command line arguments
 //     */
