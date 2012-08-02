@@ -14,15 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
 /**
@@ -115,6 +108,7 @@ public class AccountManagerFrm extends javax.swing.JFrame {
         btnSave = new javax.swing.JButton();
         lbMessage = new javax.swing.JLabel();
         btnNew = new javax.swing.JButton();
+        dateBirthDay = new com.toedter.calendar.JDateChooser();
         lblUsername9 = new javax.swing.JLabel();
         chkStatus = new javax.swing.JCheckBox();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -302,6 +296,9 @@ public class AccountManagerFrm extends javax.swing.JFrame {
             }
         });
 
+        dateBirthDay.setDate(new java.util.Date(1343873113000L));
+        dateBirthDay.setDateFormatString("dd-MM-yyyy");
+
         lblUsername9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lblUsername9.setText("Status");
 
@@ -315,6 +312,7 @@ public class AccountManagerFrm extends javax.swing.JFrame {
                     .addComponent(txtName)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
                     .addComponent(jScrollPane3)
+                    .addComponent(dateBirthDay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(lblUsername5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(13, 13, 13)
@@ -371,7 +369,9 @@ public class AccountManagerFrm extends javax.swing.JFrame {
                 .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblUsername2)
-                .addGap(33, 33, 33)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(dateBirthDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
                 .addComponent(lblUsername3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -391,7 +391,7 @@ public class AccountManagerFrm extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblUsername7)
                     .addComponent(txtSalary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblUsername9, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(chkStatus, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -557,25 +557,21 @@ public class AccountManagerFrm extends javax.swing.JFrame {
         // TODO add your handling code here:
         int index = tblAccountList.getSelectedRow();
         if (index > -1) {
-            try {
-                Vector acc = (Vector) list.get(index);
-                // input value to the form
-                txtAccountNo.setText(acc.get(0).toString());
+                AccountManagerImpl accMng= new AccountManagerImpl();
+                String accNo = (String) tblAccountList.getValueAt(index,0);
+                accDefault = accMng.selectRow(accNo);
+                txtAccountNo.setText(accDefault.getAccountNo());
                 txtPassword.setText("");
-                txtName.setText(acc.get(2).toString());
-                dateBirthDay.setDate(dateFormat.parse(acc.get(3).toString()));
-                txtOrganization.setText(acc.get(4).toString());
-                txtAddress.setText(acc.get(5).toString());
-                txtEmail.setText(acc.get(6).toString());
-                txtPhone.setText(acc.get(7).toString());
-                txtSalary.setText(acc.get(8).toString());
-                chkStatus.setSelected((boolean)acc.get(10));
-                btnDetails.setEnabled(true);
-               // set registerDate for accDefault  
-                accDefault.setRegisterDate(new java.sql.Date(dateFormat.parse(acc.get(9).toString()).getTime()));
-            } catch (ParseException ex) {
-                JOptionPane.showMessageDialog(null,"Has error:"+ ex.getMessage());
-            }
+                txtName.setText(accDefault.getName());
+                dateBirthDay.setDate(accDefault.getBirthday());
+                txtOrganization.setText(accDefault.getOrganization());
+                txtAddress.setText(accDefault.getAddress());
+                txtEmail.setText(accDefault.getEmail());
+                txtPhone.setText(accDefault.getPhone());
+                txtSalary.setText(accDefault.getSalary()+"");
+                chkStatus.setSelected(accDefault.isStatus());
+                btnDetails.setEnabled(true);   
+            
         }
     }//GEN-LAST:event_tblAccountListMouseClicked
    // set value from form Information to object accDefault 
@@ -714,6 +710,7 @@ public class AccountManagerFrm extends javax.swing.JFrame {
     private javax.swing.JButton btnSearch;
     private javax.swing.JComboBox cbStatus;
     private javax.swing.JCheckBox chkStatus;
+    private com.toedter.calendar.JDateChooser dateBirthDay;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;

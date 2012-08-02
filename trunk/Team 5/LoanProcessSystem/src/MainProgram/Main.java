@@ -35,7 +35,10 @@ public class Main {
             public void run() {
                Home homeForm= new Home(); 
                AccountDetailsFrm accForm= new AccountDetailsFrm();
-               new LoginFrm(homeForm,accForm).setVisible(true);
+               LoginFrm loginFrm = new LoginFrm(homeForm, accForm);
+               
+               loginFrm.setVisible(true);
+               loginFrm.setLocationRelativeTo(null);
             }
         });
     }

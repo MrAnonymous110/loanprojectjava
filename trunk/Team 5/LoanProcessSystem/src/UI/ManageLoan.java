@@ -229,7 +229,10 @@ public class ManageLoan extends javax.swing.JFrame {
         int indexAcc = cboAccount.getSelectedIndex();
         int indexType = cboLoanType.getSelectedIndex();
         int indexBra = cboBranch.getSelectedIndex();
-
+        int numBra = VecBra.size();
+        for (int i = 0; i < numBra; i++) {
+            Vector v = (Vector) VecBra.get(i);
+        }
         if (validateFeild()) {
             Vector vAcc = (Vector) VecAcc.get(indexAcc - 1);
             Vector vBra = (Vector) VecBra.get(indexBra - 1);
@@ -251,7 +254,7 @@ public class ManageLoan extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Successful!");
                 dispose();
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Can not insert");
+                JOptionPane.showMessageDialog(null, "Can not insert(error Database)");
             }
         } else {
             lblAleart.setText("please check data in all feild");
