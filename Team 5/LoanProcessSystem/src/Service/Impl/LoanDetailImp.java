@@ -62,7 +62,7 @@ public class LoanDetailImp implements LoanDetail {
         try {
             msssqlConnection.registerDriver();
             Connection cn = msssqlConnection.createConnection();
-            String sql = "{call sp_LoanType_DeleteRow(?)}";
+            String sql = "{call sp_LoanDetails_DeleteRow(?)}";
             CallableStatement calStat = cn.prepareCall(sql);
             calStat.setInt(1, ID);
             calStat.execute();
@@ -96,7 +96,7 @@ public class LoanDetailImp implements LoanDetail {
     }
 
     @Override
-    public boolean changeLoanDetail(int LoanID, String AccountNo, float LoanMoney, float Current, int TypeID, Date BeginTime, Date EndTime, int BranchID, Boolean Status) throws SQLException {
+    public boolean changeLoanDetail(int LoanID, String AccountNo, float LoanMoney, float Current, int TypeID, Date BeginTime, Date EndTime, int BranchID) throws SQLException {
         try {
             msssqlConnection.registerDriver();
             Connection cn = msssqlConnection.createConnection();
@@ -110,7 +110,7 @@ public class LoanDetailImp implements LoanDetail {
             calStat.setDate(6, BeginTime);
             calStat.setDate(7, EndTime);
             calStat.setInt(8, BranchID);
-            calStat.setBoolean(8, Status);
+            calStat.execute();
             return true;
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
@@ -126,7 +126,9 @@ public class LoanDetailImp implements LoanDetail {
             while (rs.next()) {
                 System.out.println(rs.getObject(1) + "\t" + rs.getObject(2) + "\t" + rs.getObject(3) + "\t" + rs.getObject(4) + "\t" + rs.getObject(5) + "\t" + rs.getObject(6) + "\t" + rs.getObject(7) + "\t" + rs.getObject(8));
             }
-            LD.InsertLoanDetail("C1011L0011          ", Float.valueOf("3.5534"), Float.valueOf("4324"), 2, Date.valueOf("2/12/2012"), Date.valueOf("3/6/2012"), 2);
+            LD.InsertLoanDetail("C1011L0011          ", Float.valueOf("3.5534"), Float.valueOf("4324"), 2, Date.valueOf("2012-11-11"), Date.valueOf("2100-11-23"), 2);
+            rs.beforeFirst();
+            System.out.println("");
             while (rs.next()) {
                 System.out.println(rs.getObject(1) + "\t" + rs.getObject(2) + "\t" + rs.getObject(3) + "\t" + rs.getObject(4) + "\t" + rs.getObject(5) + "\t" + rs.getObject(6) + "\t" + rs.getObject(7) + "\t" + rs.getObject(8));
             }

@@ -4,13 +4,20 @@
  */
 package UI;
 
+import Service.Impl.AccountManagerImpl;
+import Service.Impl.BranchesManagerImpl;
 import Service.Impl.LoanDetailImp;
+import Service.Impl.LoanTypeImp;
 import java.awt.Toolkit;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -23,6 +30,11 @@ public class LoanDetailsFrm extends javax.swing.JFrame {
     LoanDetailImp LD;
     ResultSet rs;
     DefaultTableModel model;
+    AccountManagerImpl acc;
+    BranchesManagerImpl bra;
+    Vector VecAcc;
+    Vector VecBra;
+    ResultSet rsLoanType;
 
     /**
      * Creates new form LoanDetailsFrm
@@ -35,13 +47,13 @@ public class LoanDetailsFrm extends javax.swing.JFrame {
         loadData();
     }
 
-    public LoanDetailsFrm(int ID) {
+    public LoanDetailsFrm(String AccNo) {
         initComponents();
         int h = Toolkit.getDefaultToolkit().getScreenSize().height;
         int w = Toolkit.getDefaultToolkit().getScreenSize().width;
         setSize(w, h);
         PnlInfor.setBounds(0, 0, w / 4, h);
-        loadData(ID);
+        loadData(AccNo);
     }
 
     /**
@@ -66,21 +78,26 @@ public class LoanDetailsFrm extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         lblStatus = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        txtLoanMoney = new javax.swing.JTextField();
-        txtCurrentMoney = new javax.swing.JTextField();
         cboLoanType = new javax.swing.JComboBox();
         cboBranch = new javax.swing.JComboBox();
         cboAccount = new javax.swing.JComboBox();
         lblBeginTime = new javax.swing.JLabel();
         lblEndTime = new javax.swing.JLabel();
+        lblLoanMoney = new javax.swing.JLabel();
+        lblCurrentMoney = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         btnUpdate = new javax.swing.JButton();
-        btnDelete = new javax.swing.JButton();
         btnAdd = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Loan Details");
         setName("frmLoanDetails");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                reload(evt);
+            }
+        });
 
         jScrollPane1.setViewportBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(153, 153, 0)));
 
@@ -103,8 +120,9 @@ public class LoanDetailsFrm extends javax.swing.JFrame {
         getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         container.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(0, 255, 51)));
+        container.setPreferredSize(new java.awt.Dimension(340, 468));
 
-        PnlInfor.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 0, 153)));
+        PnlInfor.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED), "Information"));
         PnlInfor.setPreferredSize(new java.awt.Dimension(300, 200));
 
         jLabel1.setText("Current Money:");
@@ -145,6 +163,12 @@ public class LoanDetailsFrm extends javax.swing.JFrame {
         lblEndTime.setText("not set");
         lblEndTime.setPreferredSize(new java.awt.Dimension(20, 14));
 
+        lblLoanMoney.setText("not set");
+        lblLoanMoney.setPreferredSize(new java.awt.Dimension(20, 14));
+
+        lblCurrentMoney.setText("not set");
+        lblCurrentMoney.setPreferredSize(new java.awt.Dimension(20, 14));
+
         javax.swing.GroupLayout PnlInforLayout = new javax.swing.GroupLayout(PnlInfor);
         PnlInfor.setLayout(PnlInforLayout);
         PnlInforLayout.setHorizontalGroup(
@@ -163,16 +187,14 @@ public class LoanDetailsFrm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PnlInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lblStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(PnlInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(cboAccount, javax.swing.GroupLayout.Alignment.LEADING, 0, 144, Short.MAX_VALUE)
-                        .addComponent(txtLoanMoney, javax.swing.GroupLayout.Alignment.LEADING))
+                    .addComponent(cboAccount, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cboBranch, 0, 158, Short.MAX_VALUE)
                     .addComponent(lblBeginTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblEndTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(PnlInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(cboLoanType, javax.swing.GroupLayout.Alignment.LEADING, 0, 144, Short.MAX_VALUE)
-                        .addComponent(txtCurrentMoney, javax.swing.GroupLayout.Alignment.LEADING)))
-                .addContainerGap(83, Short.MAX_VALUE))
+                    .addComponent(cboLoanType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblLoanMoney, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblCurrentMoney, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
         PnlInforLayout.setVerticalGroup(
             PnlInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -183,11 +205,11 @@ public class LoanDetailsFrm extends javax.swing.JFrame {
                 .addGap(1, 1, 1)
                 .addGroup(PnlInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtLoanMoney, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblLoanMoney, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PnlInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCurrentMoney, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblCurrentMoney, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PnlInforLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -212,47 +234,46 @@ public class LoanDetailsFrm extends javax.swing.JFrame {
         );
 
         btnUpdate.setText("Change Loan data");
-        btnUpdate.setEnabled(false);
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateActionPerformed(evt);
             }
         });
 
-        btnDelete.setText("Delete");
-        btnDelete.setEnabled(false);
-
         btnAdd.setText("Add new Loan");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(270, Short.MAX_VALUE)
+                .addComponent(btnUpdate)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAdd)
-                .addGap(27, 27, 27))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(btnUpdate)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(142, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addGap(21, 21, 21)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addContainerGap(22, Short.MAX_VALUE)))
+                .addContainerGap(21, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         javax.swing.GroupLayout containerLayout = new javax.swing.GroupLayout(container);
@@ -260,17 +281,21 @@ public class LoanDetailsFrm extends javax.swing.JFrame {
         containerLayout.setHorizontalGroup(
             containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(containerLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(PnlInfor, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 56, Short.MAX_VALUE))
+                    .addGroup(containerLayout.createSequentialGroup()
+                        .addComponent(PnlInfor, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(22, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         containerLayout.setVerticalGroup(
             containerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(containerLayout.createSequentialGroup()
-                .addComponent(PnlInfor, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(6, 6, 6)
+                .addComponent(PnlInfor, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34))
         );
 
         getContentPane().add(container, java.awt.BorderLayout.WEST);
@@ -281,18 +306,63 @@ public class LoanDetailsFrm extends javax.swing.JFrame {
     private void chooseRow(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chooseRow
         // TODO add your handling code here:
         int row = tblLoanDetails.getSelectedRow();
-        txtLoanMoney.setText(model.getValueAt(row, 4).toString());
-        txtCurrentMoney.setText(model.getValueAt(row, 5).toString());
+        lblLoanMoney.setText(model.getValueAt(row, 4).toString());
+        lblCurrentMoney.setText(model.getValueAt(row, 5).toString());
         lblBeginTime.setText(model.getValueAt(row, 6).toString());
         lblEndTime.setText(model.getValueAt(row, 7).toString());
-        cboAccount.setSelectedItem(model.getValueAt(row, 1).toString());
-        
+        cboAccount.setSelectedItem(model.getValueAt(row, 0));
+        cboBranch.setSelectedItem(model.getValueAt(row, 8));
+        cboLoanType.setSelectedItem(model.getValueAt(row, 2));
     }//GEN-LAST:event_chooseRow
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        // TODO add your handling code here:
-        
+        int row = tblLoanDetails.getSelectedRow();
+        if (tblLoanDetails.getSelectedRow() >= 0) {
+            try {
+                rs.absolute(row + 1);
+                int ID = rs.getInt("LoanID");
+                ManageLoan ML = new ManageLoan(ID);
+                ML.setVisible(true);
+                dispose();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "error with database");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "please choose one row.");
+        }
     }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        if (tblLoanDetails.getSelectedRow() >= 0) {
+            try {
+                int index = tblLoanDetails.getSelectedRow();
+                int confirm = JOptionPane.showConfirmDialog(null, "delete this Loan?", "delete", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    rs.absolute(index + 1);
+                    if (LD.DelLoanDetail(rs.getInt("LoanID"))) {
+                        JOptionPane.showMessageDialog(null, "Delete done");
+                        model.removeRow(index);
+                    }
+                }
+                new LoanDetailsFrm().setVisible(true);
+                dispose();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "please choose one row.");
+        }
+
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        ManageLoan ML = new ManageLoan();
+        ML.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void reload(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_reload
+    }//GEN-LAST:event_reload
 
     /**
      * @param args the command line arguments
@@ -331,7 +401,7 @@ public class LoanDetailsFrm extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                new LoanDetailsFrm().setVisible(true);
+                new LoanDetailsFrm("C1011L0011          ").setVisible(true);
             }
         });
     }
@@ -355,11 +425,11 @@ public class LoanDetailsFrm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblBeginTime;
+    private javax.swing.JLabel lblCurrentMoney;
     private javax.swing.JLabel lblEndTime;
+    private javax.swing.JLabel lblLoanMoney;
     private javax.swing.JLabel lblStatus;
     private javax.swing.JTable tblLoanDetails;
-    private javax.swing.JTextField txtCurrentMoney;
-    private javax.swing.JTextField txtLoanMoney;
     // End of variables declaration//GEN-END:variables
 
     private void loadData() {
@@ -380,18 +450,27 @@ public class LoanDetailsFrm extends javax.swing.JFrame {
                 }
                 model.addRow(row);
             }
-            
-            rs.beforeFirst();
-            while (rs.next()) {
-                cboAccount.addItem(rs.getObject("AccountNo"));
+
+            LD = new LoanDetailImp();
+            LoanTypeImp LT = new LoanTypeImp();
+            rsLoanType = LT.getAllLoanType();
+            while (rsLoanType.next()) {
+                cboLoanType.addItem(rsLoanType.getString("TypeName"));
             }
-            rs.beforeFirst();
-            while (rs.next()) {
-                cboLoanType.addItem(rs.getObject("TypeName"));
+            acc = new AccountManagerImpl();
+            VecAcc = acc.getAll();
+            int numAcc = VecAcc.size();
+            for (int i = 0; i < numAcc; i++) {
+                Vector v = (Vector) VecAcc.get(i);
+                cboAccount.addItem(v.get(0));
             }
-            rs.beforeFirst();
-            while (rs.next()) {
-                cboBranch.addItem(rs.getObject("Expr2"));
+
+            bra = new BranchesManagerImpl();
+            VecBra = bra.GetListFromTable("Select * From [Branches]");
+            int numBra = VecBra.size();
+            for (int i = 0; i < numBra; i++) {
+                Vector v = (Vector) VecBra.get(i);
+                cboBranch.addItem(v.get(1));
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
@@ -399,6 +478,7 @@ public class LoanDetailsFrm extends javax.swing.JFrame {
         tblLoanDetails.setModel(model);
         tblLoanDetails.removeColumn(tblLoanDetails.getColumn("AccountNo"));
         tblLoanDetails.removeColumn(tblLoanDetails.getColumn("Expr1"));
+        tblLoanDetails.removeColumn(tblLoanDetails.getColumn("LoanID"));
         tblLoanDetails.getColumn("Name").setHeaderValue("Customer Name");
         tblLoanDetails.getColumn("TypeName").setHeaderValue("Loan type");
         tblLoanDetails.getColumn("LoanMoney").setHeaderValue("Original Loan");
@@ -408,10 +488,11 @@ public class LoanDetailsFrm extends javax.swing.JFrame {
         tblLoanDetails.getColumn("Expr2").setHeaderValue("Branch Name");
     }
 
-    private void loadData(int ID) {
+    private void loadData(String AccNo) {
         try {
             LD = new LoanDetailImp();
-            rs = LD.getLoanDetailByID(ID);
+            model = new DefaultTableModel();
+            rs = LD.getAllLoanDetail();
             model = new DefaultTableModel();
             ResultSetMetaData RSmetaData = rs.getMetaData();
             int colNum = RSmetaData.getColumnCount();
@@ -426,13 +507,51 @@ public class LoanDetailsFrm extends javax.swing.JFrame {
                 }
                 model.addRow(row);
             }
-            rs.beforeFirst();
-            while (rs.next()) {
-                cboAccount.addItem(rs.getObject("AccountNo"));
+
+            LD = new LoanDetailImp();
+            LoanTypeImp LT = new LoanTypeImp();
+            rsLoanType = LT.getAllLoanType();
+            while (rsLoanType.next()) {
+                cboLoanType.addItem(rsLoanType.getString("TypeName"));
             }
+            acc = new AccountManagerImpl();
+            VecAcc = acc.getAll();
+            int numAcc = VecAcc.size();
+            for (int i = 0; i < numAcc; i++) {
+                Vector v = (Vector) VecAcc.get(i);
+                cboAccount.addItem(v.get(0));
+            }
+            String AccFromDB;
+            for (int i = 0; i < numAcc; i++) {
+                Vector v = (Vector) VecAcc.get(i);
+                AccFromDB = v.get(0).toString();
+                boolean reg = AccFromDB.equalsIgnoreCase(AccNo);
+                if (reg) {
+                    cboAccount.setSelectedItem(v.get(0));
+                }
+            }
+
+            bra = new BranchesManagerImpl();
+            VecBra = bra.GetListFromTable("Select * From [Branches]");
+            int numBra = VecBra.size();
+            for (int i = 0; i < numBra; i++) {
+                Vector v = (Vector) VecBra.get(i);
+                cboBranch.addItem(v.get(1));
+            }
+
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }
         tblLoanDetails.setModel(model);
+        tblLoanDetails.removeColumn(tblLoanDetails.getColumn("AccountNo"));
+        tblLoanDetails.removeColumn(tblLoanDetails.getColumn("Expr1"));
+        tblLoanDetails.removeColumn(tblLoanDetails.getColumn("LoanID"));
+        tblLoanDetails.getColumn("Name").setHeaderValue("Customer Name");
+        tblLoanDetails.getColumn("TypeName").setHeaderValue("Loan type");
+        tblLoanDetails.getColumn("LoanMoney").setHeaderValue("Original Loan");
+        tblLoanDetails.getColumn("CurentMoney").setHeaderValue("Remaining Amount");
+        tblLoanDetails.getColumn("BeginTime").setHeaderValue("Start Time");
+        tblLoanDetails.getColumn("EndTime").setHeaderValue("End Time");
+        tblLoanDetails.getColumn("Expr2").setHeaderValue("Branch Name");
     }
 }
