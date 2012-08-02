@@ -19,6 +19,15 @@ public class FineDetails {
     private float money;
     private String description;
     private Date datetime;
+    private int State;
+
+    public int getState() {
+        return State;
+    }
+
+    public void setState(int State) {
+        this.State = State;
+    }
 
     public FineDetails() {
     }
